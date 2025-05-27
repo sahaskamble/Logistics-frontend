@@ -1,28 +1,18 @@
-'use client';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import Input from '@/components/ui/Input'
+import Label from '@/components/ui/Label'
+import { ArrowRightToLine } from 'lucide-react';
+import React, { useState } from 'react'
+import { FcGoogle } from 'react-icons/fc';
 
-import { useState } from "react";
-import Label from "@/components/ui/Label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowRightToLine } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
-import { Button } from "@/components/ui/button";
-import Input from "@/components/ui/Input";
-
-export default function LoginPage() {
+export default function LoginPopUp() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [rememberMe, setRememberMe] = useState(false);
 
-	const handleLogin = (e) => {
-		e.preventDefault();
-		console.log({ email, password, rememberMe });
-	};
-
 	return (
-		<div className="relative z-10 w-full min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat px-4"
-			style={{ backgroundImage: 'url("/cargo-ship.png")' }}
-		>
-			<div className="absolute -z-[1] top-0 left-0 w-full min-h-screen bg-black/20"></div>
+		<div className="w-full min-h-screen fixed flex justify-center items-center top-0 left-0 z-50 bg-black/50 backdrop-blur-md">
 			<div className="bg-white/60 backdrop-blur-sm shadow-xl rounded-2xl p-8 w-full max-w-md">
 				<div className="text-center mb-6">
 					<div className="text-sm font-bold text-green-700">Logo</div>
@@ -30,7 +20,7 @@ export default function LoginPage() {
 					<p className="text-sm text-gray-500 mt-1">Login to Your Account</p>
 				</div>
 
-				<form action="" onSubmit={handleLogin} className="space-y-5">
+				<form action="" className="space-y-5">
 					<div className="space-y-1">
 						<Label>Email Address</Label>
 

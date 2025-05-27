@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Search, Download, Eye, } from 'lucide-react';
 import Input from '@/components/ui/Input';
 import { eirCops } from '@/constants/cfs/eir-cop';
+import Link from 'next/link';
+
 
 export default function MobileTable() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [accordian, setAccordian] = useState(false);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -28,7 +31,7 @@ export default function MobileTable() {
   });
 
   return (
-    <div className="border rounded-xl flex flex-col p-4">
+    <div className="border rounded-xl flex flex-col p-4 bg-[var(--accent)] shadow-md shadow-foreground/40">
       <div className="flex-1 overflow-y-auto">
         <h2 className="text-xl font-semibold text-foreground mb-4">Receipt List</h2>
 
@@ -47,35 +50,46 @@ export default function MobileTable() {
 
         <div className="px-4 pb-4">
           {filteredRequests.map((request, index) => (
-            <div key={index} className="bg-[var(--accent)] rounded-lg p-3 mb-3 shadow-sm">
+            <div key={index} className="bg-[var(--accent)] shadow-md shadow-foreground/40 border border-foreground rounded-lg p-3 mb-3">
               <div className="flex justify-between items-center mb-4">
                 <span className={`text-xs px-2 py-1 rounded-full ${getStatusClass(request.status)}`}>
                   {request.status}
                 </span>
+                <h1 className="font-medium"># {request.id}</h1>
               </div>
-              <h1 className="font-medium"># {request.id}</h1>
-              <p className="text-sm text-gray-600 mb-1">Job Order Id: {request.jobOrderId}</p>
-              <p className="text-sm text-gray-600 mb-1">Consignee:  {request.consigneeName}</p>
-              <p className="text-sm text-gray-600 mb-1">Date: {request.date}</p>
-              <p className="text-sm text-gray-600 mb-1">Container: {request.containerNo}</p>
-              <p className="text-sm text-gray-600 mb-1">Type: {request.type}</p>
-              <p className="text-sm text-gray-600 mb-1">Movement Type: {request.movementType}</p>
-              <p className="text-sm text-gray-600 mb-1">Condition In: {request.conditionIn}</p>
-              <p className="text-sm text-gray-600 mb-1">Condition Out: {request.conditionOut}</p>
-              <p className="text-sm text-gray-600 mb-1">Remarks: {request.remarks}</p>
-              <div className="flex justify-end items-center pt-4">
-                <div className='flex gap-2 items-center'>
+              <div className="flex justify-between items-center pt-1">
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Job Order Id: {request.jobOrderId}</p>
+                  <p className="text-[12px] text-gray-600 mb-1">Date: {request.date}</p>
+                  {
+                    accordian && (
+                      <>
+                        <p className="text-sm text-gray-600 mb-1">Consignee:  {request.consigneeName}</p>
+                        <p className="text-sm text-gray-600 mb-1">Container: {request.containerNo}</p>
+                        <p className="text-sm text-gray-600 mb-1">Type: {request.type}</p>
+                        <p className="text-sm text-gray-600 mb-1">Movement Type: {request.movementType}</p>
+                        <p className="text-sm text-gray-600 mb-1">Condition In: {request.conditionIn}</p>
+                        <p className="text-sm text-gray-600 mb-1">Condition Out: {request.conditionOut}</p>
+                        <p className="text-sm text-gray-600 mb-1">Remarks: {request.remarks}</p>
+                      </>
+                    )
+                  }
+                </div>
+                <div className='flex gap-3 items-center'>
                   <Eye
-                    size={18}
+                    size={20}
                     className="cursor-pointer text-primary"
                     onClick={() => console.log('View details for', row.original.id)}
                   />
                   <Download
-                    size={18}
+                    size={20}
                     className="cursor-pointer text-primary"
                     onClick={() => console.log('Download files for', row.original.id)}
                   />
                 </div>
+              </div>
+              <div className="w-full flex justify-center items-center">
+                <span>more</span>
               </div>
             </div>
           ))}

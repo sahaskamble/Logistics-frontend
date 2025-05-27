@@ -132,7 +132,7 @@ export default function Table() {
   ];
 
   return (
-    <div className="border rounded-lg p-6 mb-4">
+    <div className="border rounded-lg p-6 mb-4 bg-[var(--accent)]">
       <h2 className="text-xl font-semibold">Movements List</h2>
       <DataTable columns={columns} data={priorityMovements} />
     </div>

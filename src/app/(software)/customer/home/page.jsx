@@ -11,6 +11,7 @@ import { Dialog } from "@/components/ui/Dialog";
 import { FilterCFS } from "./components/Filter";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Select, SelectItem } from "@/components/ui/Select";
+import LoginPopUp from "./components/LoginPopUp";
 
 export default function ClientHomePage() {
 	const [currentService, setCurrentService] = useState('cfs');
@@ -19,6 +20,8 @@ export default function ClientHomePage() {
 	const [filter, setFilter] = useState('');
 	const [SearchQuery, setSearchQuery] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
+	const [isPopup, setIsPopup] = useState(true);
+	const [longDismissal, setLongDismissal] = useState(false)
 
 	useEffect(() => {
 		setServiceTitle(servicesList.find((service) => service.id === currentService).label);
@@ -30,6 +33,22 @@ export default function ClientHomePage() {
 			)
 		));
 	}, [currentService, SearchQuery]);
+
+
+	useEffect(() => {
+		const preActiveLogin = setInterval(() => {
+			const currentTime = Date.now();
+			const timeToWait = longDismissal ? 15 * 60 * 1000 : 15 * 1000;
+
+		}, 10000);
+	}, [])
+
+
+	const handlePopUpClose = () => {
+		if (isPopup) {
+			setIsPopup(isPopup);
+		}
+	}
 
 	return (
 		<section className={`w-full h-auto items-center justify-center`}>
@@ -85,6 +104,9 @@ export default function ClientHomePage() {
 					))}
 				</div>
 			</section>
+			{
+				isPopup && <LoginPopUp onOpen={handlePopUpClose} />
+			}
 		</section >
 	)
 }

@@ -36,7 +36,7 @@ export default function HeaderLayout({ currentService, setCurrentService }) {
 			>
 				<div className="flex flex-col w-full p-4">
 					<div className="flex items-center justify-center w-full">
-						<div className="flex items-center justify-between w-[80%]">
+						<div className="flex items-center justify-between w-full">
 							<div className="flex items-center gap-3">
 								<div className="flex items-center gap-3 rounded-xl overflow-hidden w-10 h-10">
 									<Image src={'/logo.png'} width={1500} height={1500} alt="Logo" />

@@ -7,7 +7,7 @@ import { Upload } from "lucide-react";
 
 export default function Form() {
 	return (
-		<div className="border-2 border-[var(--primary)] shadow-md shadow-foreground/40 bg-[var(--accent)] p-4 rounded-xl">
+		<div className="border border-foreground shadow-md shadow-foreground/40 bg-[var(--accent)] p-4 rounded-xl">
 			<h1 className="text-lg font-semibold">Upload New Tariff</h1>
 			<form className="pt-4 flex flex-col gap-6">
 
