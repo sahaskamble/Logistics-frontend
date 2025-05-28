@@ -2,11 +2,11 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import Input from '@/components/ui/Input'
 import Label from '@/components/ui/Label'
-import { ArrowRightToLine } from 'lucide-react';
+import { ArrowRightToLine, Cross, X } from 'lucide-react';
 import React, { useState } from 'react'
 import { FcGoogle } from 'react-icons/fc';
 
-export default function LoginPopUp() {
+export default function LoginPopUp({ onOpen }) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [rememberMe, setRememberMe] = useState(false);
@@ -14,6 +14,9 @@ export default function LoginPopUp() {
 	return (
 		<div className="w-full min-h-screen fixed flex justify-center items-center top-0 left-0 z-50 bg-black/50 backdrop-blur-md">
 			<div className="bg-white/60 backdrop-blur-sm shadow-xl rounded-2xl p-8 w-full max-w-md">
+				<div>
+					<X size={20} onClick={onOpen} />
+				</div>
 				<div className="text-center mb-6">
 					<div className="text-sm font-bold text-green-700">Logo</div>
 					<h2 className="text-2xl font-semibold text-green-800 mt-2">Welcome to Green Ocean</h2>

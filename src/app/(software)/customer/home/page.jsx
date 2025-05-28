@@ -46,7 +46,7 @@ export default function ClientHomePage() {
 
 	const handlePopUpClose = () => {
 		if (isPopup) {
-			setIsPopup(isPopup);
+			setIsPopup(!isPopup);
 		}
 	}
 
