@@ -223,7 +223,7 @@ flex flex-col
 					<Button
 						title="Logout"
 						variant="invert"
-						className="w-full max-w-[200px] rounded-xl"
+						className="w-full rounded-xl"
 						icon={<LogOutIcon className="w-4 h-4 ml-2" />}
 						onClick={() => access === 'Customer' ?
 							router.push('/customer/home')

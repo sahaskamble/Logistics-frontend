@@ -2,6 +2,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import ChatBot from "@/components/utils/Chatbot";
 import { Toaster } from "sonner";
+import { AuthContextProvider } from "@/contexts/AuthContext";
 const font = Outfit({ subsets: ["latin"], });
 
 export const metadata = {
@@ -15,7 +16,9 @@ export default function MainRootLayout({ children }) {
       <body
         className={`${font.className} antialiased`}
       >
-        {children}
+        <AuthContextProvider>
+          {children}
+        </AuthContextProvider>
         <ChatBot />
         <Toaster richColors={true} closeButton={true} expand={true} position="top-right" />
       </body>
