@@ -16,7 +16,7 @@ export function useCollection(collectionName, options = {}) {
 		}
 	}, [collectionName, options, pbclient]);
 
-	const createItem = useCollection(async (data) => {
+	const createItem = useCallback(async (data) => {
 		try {
 			const res = await pbclient.collection(collectionName).create(data);
 			setData(res);
@@ -26,7 +26,7 @@ export function useCollection(collectionName, options = {}) {
 		}
 	}, [collectionName, pbclient]);
 
-	const updateItem = useCollection(async (id, data) => {
+	const updateItem = useCallback(async (id, data) => {
 		try {
 			const res = await pbclient.collection(collectionName).update(id, data);
 			setData(res);
@@ -36,7 +36,7 @@ export function useCollection(collectionName, options = {}) {
 		}
 	}, [collectionName, pbclient]);
 
-	const deleteItem = useCollection(async (id) => {
+	const deleteItem = useCallback(async (id) => {
 		try {
 			const res = await pbclient.collection(collectionName).delete(id);
 			// mutation
@@ -45,7 +45,7 @@ export function useCollection(collectionName, options = {}) {
 			setError(err);
 			throw new Error(err);
 		}
-	}, [collectionName, pbclient, mutation]);
+	}, [collectionName, pbclient]);
 
 	const mutation = useCallback(() => {
 		fetchData();

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Search, Download, Eye, } from 'lucide-react';
+import { Search, Download, Eye, Pencil, TrashIcon, } from 'lucide-react';
 import Input from '@/components/ui/Input';
 import { jobOrders } from '@/constants/cfs/job-order';
+import CreateForm from './Form';
 
 const MobileTable = () => {
 
@@ -32,6 +33,9 @@ const MobileTable = () => {
     <div className="border rounded-xl flex flex-col p-4">
       <div className="flex-1 overflow-y-auto">
         <h2 className="text-xl font-semibold text-green-900 mb-4">Job Orders</h2>
+        <div className="flex justify-end">
+          <CreateForm />
+        </div>
         <div className="px-4 py-8 flex items-center justify-between">
           <div className="relative flex-1 mr-2">
             <Input
@@ -65,6 +69,16 @@ const MobileTable = () => {
                     size={18}
                     className="cursor-pointer text-primary"
                     onClick={() => console.log('View details for', row.original.id)}
+                  />
+                  <Pencil
+                    size={18}
+                    className="cursor-pointer text-primary"
+                    onClick={() => console.log('Edit details for', row.original.id)}
+                  />
+                  <TrashIcon
+                    size={18}
+                    className="cursor-pointer text-primary"
+                    onClick={() => console.log('Delete details for', row.original.id)}
                   />
                   <Download
                     size={18}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Label from "@/components/ui/Label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowRightToLine } from "lucide-react";
@@ -8,7 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import Input from "@/components/ui/Input";
 import { useAuth } from "@/contexts/AuthContext";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { RoleCheckByPathName } from "@/components/utils/RoleChecker";
 
 export default function LoginPage() {
@@ -17,6 +17,7 @@ export default function LoginPage() {
 	const [rememberMe, setRememberMe] = useState(false);
 	const { user, Login } = useAuth();
 	const pathName = usePathname();
+	const router = useRouter();
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -27,7 +28,7 @@ export default function LoginPage() {
 				localStorage.setItem('rememberMe', JSON.stringify(rememberMe));
 				localStorage.setItem('record', JSON.stringify(res));
 				localStorage.setItem('role', role);
-				console.log(res);
+				router.push('/customer/dashboard')
 			} else {
 				alert('Login Unsuccessfull');
 			}
@@ -37,7 +38,12 @@ export default function LoginPage() {
 		}
 	}
 
-	console.log(user);
+	useEffect(() => {
+		if (user) {
+			router.push('/customer/dashboard')
+		}
+	}, [user]);
+
 
 	return (
 		<div className="relative z-10 w-full min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat px-4"

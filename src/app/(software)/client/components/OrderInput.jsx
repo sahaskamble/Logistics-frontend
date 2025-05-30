@@ -1,10 +1,13 @@
 import Input from "@/components/ui/Input";
 import Label from "@/components/ui/Label";
-import { orders } from "@/constants/orders";
+import { useCollection } from "@/hooks/useCollection";
 import { Check } from "lucide-react";
 import { useState } from "react";
 
 export default function OrderInput({ setOrderId }) {
+	const { data: orders } = useCollection('cfs_orders', {
+		expand: 'cfs'
+	});
 	const [formData, setFormData] = useState({
 		orderId: '',
 		orderInfo: '',
@@ -23,7 +26,7 @@ export default function OrderInput({ setOrderId }) {
 
 	const handleSelectOrder = ({ info }) => {
 		setFormData({
-			orderInfo: `${info.id} - ${info.cfs.title}`,
+			orderInfo: `${info.id} - ${info.expand.cfs.title}`,
 			orderId: info.id,
 		});
 		setOrderId(info.id);
@@ -46,18 +49,18 @@ export default function OrderInput({ setOrderId }) {
 				<div className="absolute top-[7dvh] z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
 					{orders
 						.filter(order =>
-							(`${order.id} - ${order.cfs.title}`)
+							(`${order?.id} - ${order?.expand?.cfs?.title}`)
 								.toLowerCase()
 								.includes(formData.orderInfo.toLowerCase())
 						)
 						.map(order => (
 							<div
-								key={order.id}
+								key={order?.id}
 								className="flex items-center justify-between p-2 hover:bg-accent cursor-pointer"
 								onClick={() => handleSelectOrder({ info: order })}
 							>
-								<h1>{order.id} - {order.cfs.title}</h1>
-								{formData.orderId === order.id && (
+								<h1>{order?.id} - {order?.expand?.cfs?.title}</h1>
+								{formData?.orderId === order?.id && (
 									<Check className="h-4 w-4 text-primary" />
 								)}
 							</div>

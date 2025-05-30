@@ -1,6 +1,6 @@
 import { useSidebar } from '@/contexts/SidebarProvider';
 import { CompanyName } from '@/constants/CompanyName';
-import { Bell, LogOutIcon, PanelLeft, User, ChevronDown, ChevronRight, X, MessageSquare, CircleUserRound, Sailboat, Settings, LayoutDashboard } from 'lucide-react';
+import { Bell, LogOutIcon, PanelLeft, User, ChevronDown, ChevronRight, MessageSquare, CircleUserRound, Sailboat, LayoutDashboard } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Button from './Button';
 import { navLinks } from '@/constants/navLinks';
@@ -229,8 +229,8 @@ flex flex-col
 							router.push('/customer/home')
 							: (
 								access === 'Client'
-									? router.push('/client/home')
-									: router.push('/')
+									? router.push('/client/login')
+									: router.push('/gol/login')
 							)
 						}
 						iconPosition="right"
