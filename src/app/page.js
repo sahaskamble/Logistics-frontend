@@ -1,318 +1,160 @@
 'use client';
+import Image from "next/image";
+import { Ship, Plane, Truck, Search, Menu, X } from 'lucide-react';
+import Packages from "./components/packages/page";
+import WhiteCard from "./components/white-card/page";
+import GreenCard from "./components/green-card/page";
+import FAQ from "./components/faq/page";
+import Footer from "./components/footer/page";
+import { useState } from 'react';
+import HeroPage from "./components/hero_page/page";
 
-import Image from 'next/image';
-import { useState, useEffect, useCallback } from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
-import { Ship, Plane, Truck, Menu, X } from 'lucide-react';
 
-export default function Hero() {
+
+export default function Home() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [selectedIndex, setSelectedIndex] = useState(0);
-    const [emblaRef, emblaApi] = useEmblaCarousel(
-        {
-            loop: true,
-            duration: 30, // Smooth transition duration
-            dragFree: false,
-            containScroll: 'trimSnaps'
-        },
-        [Autoplay({ delay: 2000, stopOnInteraction: false })] // 2 seconds autoplay
-    );
 
-    const onSelect = useCallback(() => {
-        if (!emblaApi) return;
-        setSelectedIndex(emblaApi.selectedScrollSnap());
-    }, [emblaApi]);
-
-    useEffect(() => {
-        if (!emblaApi) return;
-        onSelect();
-        emblaApi.on('select', onSelect);
-        emblaApi.on('reInit', onSelect);
-    }, [emblaApi, onSelect]);
-
-
-
-    const heroImages = [
-        '/bgimg.jpeg',
-        '/bgimg1.jpeg',
-        '/bgimg2.jpeg',
-        '/bgimg3.webp',
+    const info = [
+        { no: "5.6K+", label: "Global Partners" },
+        { no: "100K", label: "Monthly Deliveries" },
+        { no: "24/7", label: "Customer Support" },
+        { no: "150K+", label: "Satisfied Customers" },
     ];
 
+
+
     return (
-        <section className="relative h-screen w-full overflow-hidden">
-            {/* Carousel Background */}
-            <div className="absolute inset-0 z-0 embla" ref={emblaRef}>
-                <div className="flex h-full embla__container">
-                    {heroImages.map((src, index) => (
-                        <div
-                            key={index}
-                            className="relative flex-[0_0_100%] w-full h-screen embla__slide"
-                        >
-                            <Image
-                                src={src}
-                                alt={`Hero background ${index}`}
-                                fill
-                                className="object-cover transition-transform duration-700 ease-in-out"
-                                priority={index === 0}
-                                quality={100}
-                                sizes="100vw"
-                                style={{
-                                    objectFit: 'cover',
-                                    objectPosition: 'center',
-                                }}
+        <div className="bg-[#effff1]">
+
+            <HeroPage />
+
+
+
+            <WhiteCard />
+
+            <Packages />
+            <section className="px-6 sm:px-20 py-16 bg-white mt-20">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#1D591F] mb-10 text-center">
+                    News & Updates
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {/* News Cards */}
+                    <div className="md:col-span-2 space-y-8">
+                        {/* Card 1 */}
+                        <div className="bg-[#effff1] rounded-xl shadow-sm hover:shadow-md transition overflow-hidden">
+                            <img
+                                src="https://images.pexels.com/photos/906982/pexels-photo-906982.jpeg"
+                                alt="Singapore Logistics Hub"
+                                className="w-full h-56 object-cover"
                             />
-                            <div className="absolute inset-0 bg-black/30" />
-
-                            {/* First Slide - Global Logistics Solutions */}
-                            {index === 0 && (
-                                <div className="absolute inset-0 z-10 flex flex-col items-center sm:items-start justify-center px-4 mt-20 text-center sm:text-left">
-                                    <div
-                                        className={`flex justify-center sm:justify-start space-x-3 mb-6 transition-all duration-800 ease-out ${selectedIndex === 0
-                                            ? 'transform translate-y-0 scale-100 opacity-100'
-                                            : 'transform translate-y-12 scale-75 opacity-0'
-                                            }`}
-                                        style={{
-                                            transitionDelay: selectedIndex === 0 ? '0.3s' : '0s'
-                                        }}
-                                    >
-                                        {[Ship, Plane, Truck].map((Icon, iconIndex) => (
-                                            <div key={iconIndex} className="p-1.5 sm:p-3 rounded-full bg-[#effff1]">
-                                                <Icon className="text-[#2e6f40]" size={18} />
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div>
-                                        <h1
-                                            className={`text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold transition-all duration-1000 ease-out ${selectedIndex === 0
-                                                ? 'transform translate-y-0 scale-100 opacity-100'
-                                                : 'transform translate-y-16 scale-90 opacity-0'
-                                                }`}
-                                            style={{
-                                                transitionDelay: selectedIndex === 0 ? '0.5s' : '0s'
-                                            }}
-                                        >
-                                            Global Logistics Solutions
-                                        </h1>
-                                        <h3
-                                            className={`text-white mt-4 text-sm sm:text-base md:text-lg lg:text-xl transition-all duration-800 ease-out ${selectedIndex === 0
-                                                ? 'transform translate-y-0 translate-x-0 opacity-100'
-                                                : 'transform translate-y-8 translate-x-8 opacity-0'
-                                                }`}
-                                            style={{
-                                                transitionDelay: selectedIndex === 0 ? '0.7s' : '0s'
-                                            }}
-                                        >
-                                            Sustainable shipping solutions for a connected world
-                                        </h3>
-                                        <h3
-                                            className={`text-white mt-2 text-sm sm:text-base md:text-lg lg:text-xl transition-all duration-800 ease-out ${selectedIndex === 0
-                                                ? 'transform translate-y-0 translate-x-0 opacity-100'
-                                                : 'transform translate-y-8 -translate-x-8 opacity-0'
-                                                }`}
-                                            style={{
-                                                transitionDelay: selectedIndex === 0 ? '0.9s' : '0s'
-                                            }}
-                                        >
-                                            150+ Countries | 1000+ Routes | 24/7 Support
-                                        </h3>
-                                    </div>
-
-                                    <div
-                                        className={`flex flex-wrap gap-3 mt-6 justify-center sm:justify-start transition-all duration-800 ease-out ${selectedIndex === 0
-                                            ? 'transform translate-y-0 scale-100 opacity-100'
-                                            : 'transform translate-y-12 scale-75 opacity-0'
-                                            }`}
-                                        style={{
-                                            transitionDelay: selectedIndex === 0 ? '1.1s' : '0s'
-                                        }}
-                                    >
-                                        <button className="text-[#2E6F40] bg-white px-4 py-1.5 text-xs sm:text-sm rounded-3xl">
-                                            Sign In
-                                        </button>
-                                        <button className="bg-[#2E6F40] text-white px-4 py-1.5 text-xs sm:text-sm rounded-3xl">
-                                            Be a Merchant
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Second Slide - Line Split Animation */}
-                            {index === 1 && (
-                                <div className="absolute inset-0 flex items-center justify-center z-20">
-                                    <div className="text-center text-white relative">
-                                        {/* Center Line that splits */}
-                                        <div className="relative mb-8">
-                                            <div
-                                                className={`absolute left-1/2 top-1/2 h-0.5 bg-red-500 transition-all duration-400 ease-in-out ${selectedIndex === 1 ? 'w-24 -translate-x-12' : 'w-0 -translate-x-0'
-                                                    }`}
-                                                style={{ transitionDelay: selectedIndex === 1 ? '0.1s' : '0s' }}
-                                            />
-                                            <div
-                                                className={`absolute left-1/2 top-1/2 h-0.5 bg-red-500 transition-all duration-400 ease-in-out ${selectedIndex === 1 ? 'w-24 translate-x-0' : 'w-0 translate-x-0'
-                                                    }`}
-                                                style={{ transitionDelay: selectedIndex === 1 ? '0.1s' : '0s' }}
-                                            />
-                                        </div>
-
-                                        {/* Text that pops open */}
-                                        <div className="overflow-hidden">
-                                            <h1
-                                                className={`text-4xl md:text-6xl lg:text-7xl font-bold mb-4 transition-all duration-500 ease-out ${selectedIndex === 1
-                                                    ? 'transform scale-100 opacity-100'
-                                                    : 'transform scale-0 opacity-0'
-                                                    }`}
-                                                style={{
-                                                    transitionDelay: selectedIndex === 1 ? '0.5s' : '0s'
-                                                }}
-                                            >
-                                                DELIVERING EXCELLENCE
-                                            </h1>
-                                        </div>
-
-                                        <div className="overflow-hidden">
-                                            <p
-                                                className={`text-lg md:text-xl lg:text-2xl mb-8 transition-all duration-400 ease-out ${selectedIndex === 1
-                                                    ? 'transform scale-100 opacity-100'
-                                                    : 'transform scale-0 opacity-0'
-                                                    }`}
-                                                style={{
-                                                    transitionDelay: selectedIndex === 1 ? '0.7s' : '0s'
-                                                }}
-                                            >
-                                                Fast International Cargo Services
-                                            </p>
-                                        </div>
-
-                                        {/* Closing lines */}
-                                        <div className="relative mt-8">
-                                            <div
-                                                className={`absolute left-1/2 top-1/2 h-0.5 bg-red-500 transition-all duration-400 ease-in-out ${selectedIndex === 1 ? 'w-24 -translate-x-24' : 'w-0 -translate-x-0'
-                                                    }`}
-                                                style={{ transitionDelay: selectedIndex === 1 ? '1.0s' : '0s' }}
-                                            />
-                                            <div
-                                                className={`absolute left-1/2 top-1/2 h-0.5 bg-red-500 transition-all duration-400 ease-in-out ${selectedIndex === 1 ? 'w-24 translate-x-0' : 'w-0 translate-x-0'
-                                                    }`}
-                                                style={{ transitionDelay: selectedIndex === 1 ? '1.0s' : '0s' }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Third Slide - Text from Right */}
-                            {index === 2 && (
-                                <div className="absolute top-1/2 right-8 transform -translate-y-1/2 z-20">
-                                    <div className="text-white text-right">
-                                        <h1
-                                            className={`text-3xl md:text-5xl lg:text-6xl font-bold mb-4 transition-all duration-600 ease-out ${selectedIndex === 2
-                                                ? 'transform translate-x-0 rotate-0 opacity-100'
-                                                : 'transform translate-x-full rotate-12 opacity-0'
-                                                }`}
-                                            style={{
-                                                transitionDelay: selectedIndex === 2 ? '0.2s' : '0s'
-                                            }}
-                                        >
-                                            WORLDWIDE REACH
-                                        </h1>
-                                        <p
-                                            className={`text-lg md:text-xl lg:text-2xl mb-4 transition-all duration-500 ease-out ${selectedIndex === 2
-                                                ? 'transform translate-x-0 opacity-100'
-                                                : 'transform translate-x-full opacity-0'
-                                                }`}
-                                            style={{
-                                                transitionDelay: selectedIndex === 2 ? '0.4s' : '0s'
-                                            }}
-                                        >
-                                            150+ Countries Connected
-                                        </p>
-                                        <div
-                                            className={`w-32 h-1 bg-blue-500 ml-auto transition-all duration-400 ease-in-out ${selectedIndex === 2 ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
-                                                }`}
-                                            style={{
-                                                transitionDelay: selectedIndex === 2 ? '0.6s' : '0s',
-                                                transformOrigin: 'right'
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Fourth Slide - Text from Bottom Left */}
-                            {index === 3 && (
-                                <div className="absolute bottom-20 left-8 z-20">
-                                    <div className="text-white">
-                                        <h1
-                                            className={`text-3xl md:text-5xl lg:text-6xl font-bold mb-4 transition-all duration-600 ease-out ${selectedIndex === 3
-                                                ? 'transform translate-x-0 translate-y-0 opacity-100'
-                                                : 'transform -translate-x-full translate-y-8 opacity-0'
-                                                }`}
-                                            style={{
-                                                transitionDelay: selectedIndex === 3 ? '0.2s' : '0s'
-                                            }}
-                                        >
-                                            FAST DELIVERY
-                                        </h1>
-                                        <p
-                                            className={`text-lg md:text-xl lg:text-2xl transition-all duration-500 ease-out ${selectedIndex === 3
-                                                ? 'transform translate-x-0 translate-y-0 opacity-100'
-                                                : 'transform -translate-x-full translate-y-4 opacity-0'
-                                                }`}
-                                            style={{
-                                                transitionDelay: selectedIndex === 3 ? '0.4s' : '0s'
-                                            }}
-                                        >
-                                            Express Shipping Solutions
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
+                            <div className="p-6">
+                                <h3 className="text-xl font-semibold text-[#2E6F40]">
+                                    New Hub Opened in Singapore
+                                </h3>
+                                <p className="mt-2 text-gray-700">
+                                    We’ve officially launched our new logistics hub in Singapore to better serve customers in Southeast Asia. This hub increases our regional delivery capacity by 40%.
+                                </p>
+                                <span className="text-sm text-gray-500 mt-2 block">
+                                    Posted on May 28, 2025
+                                </span>
+                            </div>
                         </div>
-                    ))}
-                </div>
 
-                {/* Enhanced Slide Indicators */}
-                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50 flex space-x-3">
-                    {heroImages.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => {
-                                if (emblaApi) {
-                                    emblaApi.scrollTo(index);
-                                }
-                            }}
-                            className={`relative transition-all duration-300 ease-in-out ${index === selectedIndex
-                                ? 'w-8 h-3 bg-white rounded-full shadow-lg'
-                                : 'w-3 h-3 bg-white/60 rounded-full hover:bg-white/80 hover:scale-110'
-                                }`}
-                            aria-label={`Go to slide ${index + 1}`}
-                        />
-                    ))}
+                        {/* Card 2 */}
+                        <div className="bg-[#effff1] rounded-xl shadow-sm hover:shadow-md transition overflow-hidden">
+                            <img
+                                src="https://images.pexels.com/photos/221047/pexels-photo-221047.jpeg"
+                                alt="Eco-Friendly Packaging"
+                                className="w-full h-56 object-cover"
+                            />
+                            <div className="p-6">
+                                <h3 className="text-xl font-semibold text-[#2E6F40]">
+                                    CFS Launches Eco-Friendly Packaging
+                                </h3>
+                                <p className="mt-2 text-gray-700">
+                                    In our mission to reduce carbon footprint, CFS is introducing recyclable, biodegradable packaging materials across all services globally.
+                                </p>
+                                <span className="text-sm text-gray-500 mt-2 block">
+                                    Posted on May 20, 2025
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Card 3 */}
+                        <div className="bg-[#effff1] rounded-xl shadow-sm hover:shadow-md transition overflow-hidden">
+                            <img
+                                src="https://images.pexels.com/photos/1427541/pexels-photo-1427541.jpeg"
+                                alt="24/7 Customer Support"
+                                className="w-full h-56 object-cover"
+                            />
+                            <div className="p-6">
+                                <h3 className="text-xl font-semibold text-[#2E6F40]">
+                                    24/7 Customer Service Now Available
+                                </h3>
+                                <p className="mt-2 text-gray-700">
+                                    You spoke, we listened! Our support team is now available around the clock to assist you with tracking, quotes, and service inquiries.
+                                </p>
+                                <span className="text-sm text-gray-500 mt-2 block">
+                                    Posted on May 15, 2025
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Updates Sidebar */}
+                    <aside className="bg-[#f4fdf6] p-6 rounded-xl shadow-sm">
+                        <h4 className="text-lg font-bold text-[#1D591F] mb-4">Latest Updates</h4>
+                        <ul className="space-y-4 text-sm text-gray-700 list-disc list-inside">
+                            <li><span className="font-semibold">June 5:</span> Scheduled maintenance from 12:00 AM to 3:00 AM GMT.</li>
+                            <li><span className="font-semibold">New Feature:</span> Real-time driver GPS tracking is live.</li>
+                            <li><span className="font-semibold">Reminder:</span> Submit customs documents 24 hours before shipping.</li>
+                            <li><span className="font-semibold">Update:</span> Mobile app v3.2 now supports dark mode and QR scanning.</li>
+                            <li><span className="font-semibold">Notice:</span> Expect delays in some regions due to severe weather.</li>
+                        </ul>
+                    </aside>
                 </div>
+            </section>
+
+
+
+            <div className="bg-[#2E6F40] h-40 py-6 mt-10 flex flex-wrap justify-center items-center gap-y-4 gap-x-20 sm:gap-60 px-4">
+                {info.map((item, index) => (
+                    <div key={index} className="flex flex-col items-center text-white text-xs sm:text-base">
+                        <h1 className="text-lg sm:text-3xl font-bold">{item.no}</h1>
+                        <h3 className="mt-1 text-[10px] sm:text-sm text-center">{item.label}</h3>
+                    </div>
+                ))}
             </div>
 
-            {/* Navbar */}
-            <nav className="absolute top-0 left-0 right-0 z-10 flex justify-between items-center px-8 py-4 h-20">
-                <h1 className="text-white text-3xl font-bold">GOL</h1>
-                <div className="md:hidden">
-                    <button onClick={() => setMenuOpen(!menuOpen)}>
-                        {menuOpen ? <X className="text-white" /> : <Menu className="text-white" />}
+
+
+            <GreenCard />
+
+
+
+            <section className="text-center mt-10">
+                <h1 className="text-[#1D591F] font-bold text-2xl sm:text-3xl">Track Your Package</h1>
+                <p className="text-[#206413] mt-5 mr-10 ml-15 sm:text-xl">
+                    Enter your tracking number to get real-time updates on your shipment.
+                </p>
+
+                <div className="flex flex-col sm:flex-row justify-center mt-6 space-y-4 sm:space-y-0 sm:space-x-4 items-center">
+                    <input
+                        type="text"
+                        placeholder="Enter tracking number..."
+                        className="w-80 sm:w-96 px-3 py-1 sm:px-5 sm:py-2 rounded-md border font-sans bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2E6F40]"
+                    />
+                    <button className="bg-[#2E6F40] text-white px-10 py-2 rounded-md flex items-center space-x-2 hover:bg-[#245c34] transition">
+                        <Search size={18} />
+                        <span>Track</span>
                     </button>
                 </div>
 
-                <div className={`absolute md:static top-20 md:top-0 right-0 w-3/4 md:w-auto md:flex transition-all duration-300 ease-in-out z-20
-          ${menuOpen ? 'flex flex-col bg-white/90 shadow-lg rounded-l-lg p-6' : 'hidden'}
-          md:flex md:flex-row md:bg-transparent md:shadow-none md:rounded-none md:p-0 space-y-4 md:space-y-0 md:space-x-10`}>
-                    {['Services', 'Tracking', 'About', 'Contact'].map((text, i) => (
-                        <h1 key={i} className="cursor-pointer text-[#2E6F40] md:text-white hover:underline">{text}</h1>
-                    ))}
-                </div>
-            </nav>
+            </section>
 
-
-        </section>
+            <FAQ />
+            <Footer />
+        </div>
     );
 }

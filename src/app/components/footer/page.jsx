@@ -2,7 +2,7 @@ export default function Footer() {
     return (
         <footer>
             {/* Top Banner */}
-            <div className="bg-[#2E6F40] w-full py-10 mt-30 flex flex-col justify-center items-center text-center">
+            <div className="bg-[#2E6F40] w-full px-4 py-10 mt-30 flex flex-col justify-center items-center text-center">
                 <h1 className="text-white text-2xl sm:text-3xl font-sans font-semibold">We Are Here To Talk</h1>
                 <p className="text-gray-300 mt-3 max-w-xl">
                     Have questions about our services? Our expert team is here to help you with any inquiries.
@@ -13,7 +13,7 @@ export default function Footer() {
             </div>
 
             {/* Footer Links */}
-            <div className="footer-text pl-30 mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10  text-[#2E6F40]">
+            <div className="footer-text pl-8 mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10  text-[#2E6F40]">
                 <div className="pr-10">
                     <h2 className="font-bold mb-2 ">Green Ocean</h2>
                     <p>Sustainable global logistics solutions for a better tomorrow.</p>

@@ -83,7 +83,7 @@ export default function Packages() {
                         </div>
                     </div>
 
-                    <section className="cards flex gap-10 flex-wrap justify-center ml-10 mt-10 mb-10 px-5">
+                    <section className="cards flex gap-10 flex-wrap justify-center mt-10 mb-10 px-5">
                         {packages.map((pkg, index) => (
                             <div key={index} className="bg-white h-65 w-90 p-5 rounded-lg shadow-md flex flex-col justify-between transform transition duration-300 hover:scale-[1.03] hover:shadow-lg">
 
