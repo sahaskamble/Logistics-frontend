@@ -34,20 +34,36 @@ export default function ClientHomePage() {
 		));
 	}, [currentService, SearchQuery]);
 
+	const CheckShouldShowPopup = () => {
+		const closedAt = localStorage.getItem('closedAt');
+		const now = new Date().getTime();
+
+		if (closedAt) {
+			const closedTime = parseInt(closedAt, 10);
+			const closedFor = 5 * 60 * 1000;
+
+			if (now - closedTime < closedFor) {
+				setIsPopup(false);
+				return;
+			}
+		}
+		setIsPopup(true);
+	}
 
 	useEffect(() => {
-		const preActiveLogin = setInterval(() => {
-			const currentTime = Date.now();
-			const timeToWait = longDismissal ? 15 * 60 * 1000 : 15 * 1000;
+		CheckShouldShowPopup();
 
-		}, 10000);
+		const interval = setInterval(() => {
+			CheckShouldShowPopup(false);
+		}, 60 * 1000);
+
+		return () => clearInterval(interval);
 	}, [])
 
 
 	const handlePopUpClose = () => {
-		if (isPopup) {
-			setIsPopup(!isPopup);
-		}
+		setIsPopup(false);
+		localStorage.setItem('closedAt', new Date().getTime().toString());
 	}
 
 	return (
@@ -194,5 +210,4 @@ const ServiceCard = ({ title, location, rating, tags, description, images, id })
 			</div>
 		</div>
 	);
-
 }
