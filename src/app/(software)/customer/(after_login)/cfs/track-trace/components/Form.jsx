@@ -6,16 +6,20 @@ import { useCollection } from "@/hooks/useCollection";
 import { Truck } from "lucide-react";
 import { useState } from "react";
 
-export default function Form({ setOrder }) {
+export default function Form({ setOrder, setMovements }) {
 	const { data: orders } = useCollection('cfs_orders', {
-		expand: 'containers,cfs'
+		expand: 'cfs'
+	});
+	console.log(orders);
+	const { data: movements } = useCollection('cfs_order_movement', {
+		expand: 'order'
 	});
 
 	const [formData, setFormData] = useState({
 		igm: '',
 		bl: '',
 		boe: '',
-		container: '',
+		orderId: '',
 	});
 
 
@@ -28,9 +32,9 @@ export default function Form({ setOrder }) {
 	};
 
 	const handleTrack = () => {
-
+		console.log(orders);
 		const filtered = orders.find(order => {
-			let matchesIGM = false, matchesBL = false, matchesBOE = false, matchesContainer = false;
+			let matchesIGM = false, matchesBL = false, matchesBOE = false, matchesOrderId = false;
 
 			if (formData.igm !== '') {
 				matchesIGM = order.igmNo === formData.igm;
@@ -41,16 +45,13 @@ export default function Form({ setOrder }) {
 			if (formData.boe !== '') {
 				matchesBOE = order.boeNo === formData.boe;
 			}
-			if (formData.container !== '') {
-				order?.expand?.containers.map((container) => {
-					if (container.containerNo === formData.container) {
-						matchesContainer = true
-					};
-				});
+			if (formData.orderId !== '') {
+				matchesOrderId = order.id === formData.orderId;
 			}
-			return matchesIGM || matchesBL || matchesBOE || matchesContainer;
+			return matchesIGM || matchesBL || matchesBOE || matchesOrderId;
 		});
 		if (filtered?.id) {
+			setMovements(movements.filter((movement) => movement?.order === filtered?.id))
 			setOrder(filtered);
 		} else {
 			setOrder({})
@@ -91,11 +92,11 @@ export default function Form({ setOrder }) {
 					/>
 				</div>
 				<div className="mx-3 my-2">
-					<Label className="text-foreground" title={'Container Number'} />
+					<Label className="text-foreground" title={'Order Id'} />
 					<Input
-						placeholder='Enter Container Number'
-						name="container"
-						value={formData.container}
+						placeholder='Enter Order Id'
+						name="orderId"
+						value={formData.orderId}
 						onChange={handleChange}
 					/>
 				</div>

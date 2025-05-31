@@ -3,7 +3,8 @@ import Input from '@/components/ui/Input';
 import Label from '@/components/ui/Label';
 import Button from '@/components/ui/Button';
 import { Plus, Upload } from 'lucide-react';
-import OrderInput from './OrderInput';
+import OrderInput from '@/app/(software)/client/components/OrderInput';
+import JobOrderInput from '@/app/(software)/client/components/JobOrderInput';
 import { Dialog } from '@/components/ui/Dialog';
 import TextArea from '@/components/ui/TextArea';
 import { useCollection } from '@/hooks/useCollection';
@@ -11,21 +12,24 @@ import { Select, SelectItem } from '@/components/ui/Select';
 import ContainerInput from './ContainerInput';
 import { toast } from 'sonner';
 
-export default function Form() {
-  const { createItem, mutation } = useCollection('cfs_tariffs_request');
+export default function Form({ serviceName = '' }) {
+  const { data: cfsServices } = useCollection('sub_services', {
+    expand: 'service'
+  });
+  const { createItem, mutation } = useCollection('cfs_service_details');
 
   const [formData, setFormData] = useState({
     agent: '',
     receiptNo: '',
     type: '',
     status: 'Pending',
-    fromDate: new Date().toISOString().split('T')[0],
-    toDate: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().split('T')[0],
     remarks: '',
     files: []
   });
 
   const [orderId, setOrderId] = useState('');
+  const [jobOrderId, setJobOrderId] = useState('')
   const [containerNumber, setContainerNumber] = useState('')
   const [isOpen, setIsOpen] = useState(false);
 
@@ -50,12 +54,12 @@ export default function Form() {
       receiptNo: '',
       type: '',
       status: 'Pending',
-      fromDate: new Date().toISOString().split('T')[0],
-      toDate: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split('T')[0],
       remarks: '',
       files: []
     });
     setOrderId('');
+    setJobOrderId('');
     setContainerNumber('');
   };
 
@@ -72,13 +76,14 @@ export default function Form() {
     try {
       const data = new FormData();
       data.append('order', orderId);
+      data.append('jobOrder', jobOrderId);
       data.append('container', containerNumber);
       data.append('type', formData.type);
-      data.append('fromDate', formData.fromDate);
-      data.append('toDate', formData.toDate);
+      data.append('agent', formData.agent);
+      data.append('date', formData.date);
+      data.append('receiptNo', formData.receiptNo);
       data.append('remarks', formData.remarks);
       data.append('status', formData.status);
-
       // Append each file
       formData.files.forEach((file) => {
         data.append('files', file); // `files` must match the PocketBase field name
@@ -86,7 +91,7 @@ export default function Form() {
 
       console.log('Form submitted:', data);
       await createItem(data);
-      toast.success('Created a new request');
+      toast.success('Created a new entry');
     } catch (error) {
       console.log(error)
       toast.error(error.message);
@@ -99,12 +104,12 @@ export default function Form() {
 
   return (
     <Dialog
-      title={`Create New Request`}
+      title={`Add New ${serviceName} Entry`}
       open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button
-          title={'New'}
+          title={'Add New'}
           icon={<Plus />}
           className='rounded-md'
           iconPosition='right'
@@ -112,25 +117,48 @@ export default function Form() {
       }
     >
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 gap-4 md:w-[40dvw]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:w-[40dvw]">
 
           <OrderInput setOrderId={setOrderId} />
+          <JobOrderInput setOrderId={setJobOrderId} />
           <ContainerInput setContainerId={setContainerNumber} />
 
           <div className="flex flex-col gap-2">
             <Label title="Service Type" />
-            <Select value={formData.type} onValueChange={handleServiceChange} placeholder='Select a Service'>
-              <SelectItem value='Loaded'>Loaded Container</SelectItem>
-              <SelectItem value='Destuff'>Destuffed Container</SelectItem>
-            </Select>
+            {
+              cfsServices?.length > 0 && (
+                <Select value={formData.type} onValueChange={handleServiceChange} placeholder='Select a Service'>
+                  {
+                    cfsServices
+                      .filter((service) => service?.expand?.service?.title === 'CFS')
+                      .map((service, index) => (
+                        <SelectItem key={index} value={service?.id}>{service?.title}</SelectItem>
+                      ))
+                  }
+                </Select>
+
+              )
+            }
           </div>
 
           <div className='flex flex-col gap-2'>
-            <Label title="From" />
+            <Label title={'Agent / Supervisor'} />
+            <Input
+              type="text"
+              name="agent"
+              value={formData.agent}
+              onChange={handleChange}
+              placeholder="Enter Agent Name"
+              className="bg-accent"
+            />
+          </div>
+
+          <div className='flex flex-col gap-2'>
+            <Label title="Date of Execution" />
             <Input
               type="date"
-              name="fromDate"
-              value={formData.fromDate}
+              name="date"
+              value={formData.date}
               onChange={handleChange}
               placeholder="Select date"
               className="bg-accent"
@@ -138,27 +166,27 @@ export default function Form() {
           </div>
 
           <div className='flex flex-col gap-2'>
-            <Label title="To" />
+            <Label title={'Receipt No.'} />
             <Input
-              type="date"
-              name="toDate"
-              value={formData.toDate}
+              type="text"
+              name="receiptNo"
+              value={formData.receiptNo}
               onChange={handleChange}
-              placeholder="Select date"
+              placeholder="Enter Receipt No. (if any)"
               className="bg-accent"
             />
           </div>
+        </div>
 
-          <div className="mt-4 flex flex-col gap-2">
-            <Label title="Remarks" />
-            <TextArea
-              name="remarks"
-              placeholder="Optional remarks..."
-              value={formData.remarks}
-              onChange={handleChange}
-              className="bg-accent"
-            />
-          </div>
+        <div className="mt-4 flex flex-col gap-2">
+          <Label title="Remarks" />
+          <TextArea
+            name="remarks"
+            placeholder="Optional remarks..."
+            value={formData.remarks}
+            onChange={handleChange}
+            className="bg-accent"
+          />
         </div>
 
         <div className='flex flex-col gap-2 mt-4'>

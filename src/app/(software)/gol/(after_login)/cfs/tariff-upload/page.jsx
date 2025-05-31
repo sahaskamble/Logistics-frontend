@@ -4,8 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
 import RequestTable from "./components/Table";
-import MobileTable from "@/app/(software)/customer/components/MobileTable";
-import Table from "@/app/(software)/customer/components/Table";
+import MobileTable from "@/app/(software)/gol/(after_login)/components/MobileTable";
+import Table from "@/app/(software)/gol/(after_login)/components/Table";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function TariffUpload() {

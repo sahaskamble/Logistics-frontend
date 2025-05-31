@@ -1,14 +1,31 @@
-// import React, { useEffect, useState } from 'react';
 import { DataTable } from '@/components/ui/Table';
-import { Eye, Download, Trash } from 'lucide-react';
-import Form from './Form';
+import { Eye, Download, Trash, CircleCheckBig, CircleX } from 'lucide-react';
 import { useCollection } from '@/hooks/useCollection';
 import EditForm from './EditForm';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 export default function RequestTable() {
-  const { data, deleteItem } = useCollection('cfs_tariffs_request', {
+  const { data, deleteItem, updateItem, mutation } = useCollection('cfs_tariffs_request', {
     expand: 'order,jobOrder,container,type'
   });
+  const { user } = useAuth();
+
+  const handleStatusUpdate = async (id, status = 'Pending') => {
+    try {
+      await updateItem(id, {
+        status: status,
+        golVerified: true,
+        golVerifiedBy: user?.id
+      });
+      toast.success('Updated');
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message);
+    } finally {
+      mutation()
+    }
+  }
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -112,6 +129,16 @@ export default function RequestTable() {
             className="cursor-pointer text-primary"
             onClick={() => console.log('View details for', row.original.id)}
           />
+          <CircleCheckBig
+            size={18}
+            className="cursor-pointer text-primary"
+            onClick={() => handleStatusUpdate(row.original.id)}
+          />
+          <CircleX
+            size={18}
+            className="cursor-pointer text-primary"
+            onClick={() => handleStatusUpdate(row.original.id, 'Rejected')}
+          />
           <EditForm info={row.original} />
           <Trash
             size={18}
@@ -137,10 +164,7 @@ export default function RequestTable() {
 
   return (
     <div className="border-2 bg-accent p-4 rounded-xl mt-8">
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-lg font-semibold">Requests List</h1>
-        <Form serviceName={''} />
-      </div>
+      <h1 className="text-lg font-semibold">Requests List</h1>
 
       <DataTable
         columns={columns}

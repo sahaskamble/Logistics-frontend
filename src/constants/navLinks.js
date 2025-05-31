@@ -55,8 +55,10 @@ export const navLinks = [
 		access: 'Client',
 		subItems: [
 			{ label: "Orders", href: "/client/cfs/orders", access: 'Client', icon: Package },
+			{ label: "Order Movement", href: "/client/cfs/order-movement", access: 'Client', icon: MapPinned },
 			{ label: "Requests", href: "/client/cfs/requests", icon: MailQuestion, access: 'Client', },
 			{ label: "Services", href: "/client/cfs/services", access: 'Client', icon: FileSearch2 },
+			{ label: "Tariff Upload", href: "/client/cfs/tariff-upload", access: 'Client', icon: UploadIcon },
 			{ label: "EIR / COP", href: '/client/cfs/services/eir-cop', access: 'Client', icon: FileText, },
 			{ label: "Priority Movements", href: '/client/cfs/services/priority', access: 'Client', icon: FastForward, },
 			{ label: "Weighment Slip", href: '/client/cfs/services/weighment-slip', access: 'Client', icon: Scale, },
@@ -88,6 +90,7 @@ export const navLinks = [
 		subItems: [
 			{ label: "Orders", href: "/gol/cfs/orders", icon: Package, access: 'GOL' },
 			{ label: "Requests", href: "/gol/cfs/requests", icon: MailQuestion, access: 'GOL', },
+			{ label: "Tariff Upload", href: "/gol/cfs/tariff-upload", access: 'GOL', icon: UploadIcon },
 		]
 	},
 ]
