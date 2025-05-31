@@ -9,7 +9,6 @@ export default function RequestList() {
   const { data, deleteItem } = useCollection('cfs_orders', {
     expand: 'containers,cfs'
   });
-  console.log(data);
 
   const columns = [
     {

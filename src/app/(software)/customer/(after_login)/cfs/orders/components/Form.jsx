@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import MultiSelectDatalist from "@/components/ui/MultiSelectDatalist";
 
 export default function Form() {
+  const { user } = useAuth();
   const { data: containers } = useCollection('containers', {
     filter: `ownedBy=${user.id}`
   });
@@ -18,7 +19,6 @@ export default function Form() {
     expand: 'provider,provider.service'
   });
   const { createItem, mutation } = useCollection('cfs_orders');
-  const { user } = useAuth();
 
   const [formData, setFormData] = useState({
     igmNo: '',

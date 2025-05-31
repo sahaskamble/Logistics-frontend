@@ -1,6 +1,6 @@
 import { useSidebar } from '@/contexts/SidebarProvider';
 import { CompanyName } from '@/constants/CompanyName';
-import { Bell, LogOutIcon, PanelLeft, User, ChevronDown, ChevronRight, MessageSquare, CircleUserRound, Sailboat, LayoutDashboard } from 'lucide-react';
+import { Bell, LogOutIcon, PanelLeft, User, ChevronDown, ChevronRight, MessageSquare, CircleUserRound, Sailboat, LayoutDashboard, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Button from './Button';
 import { navLinks } from '@/constants/navLinks';

@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataTable } from '@/components/ui/Table';
-import { Eye, Download, } from 'lucide-react';
+import { Eye, Download, Trash } from 'lucide-react';
+import Form from './Form';
 import { useCollection } from '@/hooks/useCollection';
+import EditForm from './EditForm';
 
-const Table = () => {
-  const { data, deleteItem } = useCollection('cfs_job_order', {
-    expand: 'order,serviceType'
+const Table = ({ serviceName = '' }) => {
+  const { data, deleteItem } = useCollection('cfs_service_details', {
+    expand: 'order,jobOrder,container,type'
   });
+
+  const [filteredData, setFilteredData] = useState([]);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -25,60 +29,66 @@ const Table = () => {
     {
       id: 'id',
       accessorKey: 'id',
-      header: 'Job ID',
+      header: 'Entry ID',
       filterable: true,
       cell: ({ row }) => <div>{row.original.id}</div>,
     },
     {
       id: 'Order ID',
-      accessorKey: 'OrderNo',
+      accessorKey: 'order',
       header: 'Order No.',
       filterable: true,
       cell: ({ row }) => <div>{row.original.order}</div>,
     },
     {
-      id: 'consigneeName',
-      accessorKey: 'consigneeName',
-      header: 'Customer Name',
+      id: 'Job Order ID',
+      accessorKey: 'jobOrder',
+      header: 'Job Order No.',
       filterable: true,
-      cell: ({ row }) => <div>{row.original?.expand?.order?.consigneeName}</div>,
+      cell: ({ row }) => <div>{row.original.jobOrder}</div>,
     },
     {
-      id: 'fromDate',
-      accessorKey: 'fromDate',
-      header: 'From Date',
+      id: 'container',
+      accessorKey: 'container',
+      header: 'Container No.',
       filterable: true,
-      cell: ({ row }) => <div>
-        {
-          new Date(row.original.fromDate).toLocaleDateString('en-US', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-          })
-        }
-      </div>,
-    },
-    {
-      id: 'toDate',
-      accessorKey: 'toDate',
-      header: 'To Date',
-      filterable: true,
-      cell: ({ row }) => <div>
-        {
-          new Date(row.original.toDate).toLocaleDateString('en-US', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-          })
-        }
-      </div>,
+      cell: ({ row }) => <div>{row.original?.expand?.container?.containerNo}</div>,
     },
     {
       id: 'serviceType',
       accessorKey: 'serviceType',
       header: 'Service',
       filterable: true,
-      cell: ({ row }) => <div>{row.original?.expand?.serviceType?.title}</div>,
+      cell: ({ row }) => <div>{row.original?.expand?.type?.title}</div>,
+    },
+    {
+      id: 'agent',
+      accessorKey: 'agent',
+      header: 'Agent / Supervisor',
+      filterable: true,
+      cell: ({ row }) => <div>{row.original?.agent}</div>,
+    },
+    {
+      id: 'date',
+      accessorKey: 'date',
+      header: 'Execution Date',
+      filterable: true,
+      cell: ({ row }) => <div>
+        {
+          new Date(row.original.date).toLocaleDateString('en-US', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+          })
+        }
+      </div>,
+    },
+    {
+      id: 'receiptNo',
+      accessorKey: 'receiptNo',
+      header: 'Receipt No.',
+      filterable: true,
+      cell: ({ row }) => <div>{row.original?.receiptNo}</div>,
     },
     {
       id: 'remarks',
@@ -110,6 +120,18 @@ const Table = () => {
             className="cursor-pointer text-primary"
             onClick={() => console.log('View details for', row.original.id)}
           />
+          <EditForm info={row.original} />
+          <Trash
+            size={18}
+            className="cursor-pointer text-primary"
+            onClick={async () => {
+              console.log('Delete details for', row.original.id);
+              const confirmation = confirm('Are you sure you want to delete this entry?');
+              if (confirmation) {
+                await deleteItem(row.original.id);
+              }
+            }}
+          />
           <Download
             size={18}
             className="cursor-pointer text-primary"
@@ -120,13 +142,23 @@ const Table = () => {
     }
   ];
 
+  useEffect(() => {
+    if (data?.length > 0) {
+      setFilteredData(data.filter((item) => item?.expand?.type?.title === serviceName))
+    }
+  }, [data]);
+
+
   return (
     <div className="border-2 bg-accent p-4 rounded-xl mt-8">
-      <h1 className="text-lg font-semibold">Job Orders</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-lg font-semibold">{serviceName} List</h1>
+        <Form serviceName={serviceName} />
+      </div>
 
       <DataTable
         columns={columns}
-        data={data}
+        data={filteredData}
       />
     </div>
   );

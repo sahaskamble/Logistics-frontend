@@ -1,11 +1,16 @@
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Label from "@/components/ui/Label";
-import { orders } from "@/constants/orders";
+import { useCollection } from "@/hooks/useCollection";
+// import { orders } from "@/constants/orders";
 import { Truck } from "lucide-react";
 import { useState } from "react";
 
 export default function Form({ setOrder }) {
+	const { data: orders } = useCollection('cfs_orders', {
+		expand: 'containers,cfs'
+	});
+
 	const [formData, setFormData] = useState({
 		igm: '',
 		bl: '',
@@ -28,16 +33,20 @@ export default function Form({ setOrder }) {
 			let matchesIGM = false, matchesBL = false, matchesBOE = false, matchesContainer = false;
 
 			if (formData.igm !== '') {
-				matchesIGM = order.IGMNo === formData.igm;
+				matchesIGM = order.igmNo === formData.igm;
 			}
 			if (formData.bl !== '') {
-				matchesBL = order.BLNo === formData.bl;
+				matchesBL = order.blNo === formData.bl;
 			}
 			if (formData.boe !== '') {
-				matchesBOE = order.BOENo === formData.boe;
+				matchesBOE = order.boeNo === formData.boe;
 			}
 			if (formData.container !== '') {
-				matchesContainer = order.containerNo === formData.container;
+				order?.expand?.containers.map((container) => {
+					if (container.containerNo === formData.container) {
+						matchesContainer = true
+					};
+				});
 			}
 			return matchesIGM || matchesBL || matchesBOE || matchesContainer;
 		});
@@ -55,7 +64,7 @@ export default function Form({ setOrder }) {
 			</div>
 			<div className="p-2 grid md:grid-cols-2 grid-cols-1 text-black">
 				<div className="mx-3 my-2">
-					<Label title={'IGM Number'} />
+					<Label className="text-foreground" title={'IGM Number'} />
 					<Input
 						placeholder='Enter IGM Number'
 						name="igm"
@@ -64,7 +73,7 @@ export default function Form({ setOrder }) {
 					/>
 				</div>
 				<div className="mx-3 my-2">
-					<Label title={'BL Number'} />
+					<Label className="text-foreground" title={'BL Number'} />
 					<Input
 						placeholder='Enter BL Number'
 						name="bl"
@@ -73,7 +82,7 @@ export default function Form({ setOrder }) {
 					/>
 				</div>
 				<div className="mx-3 my-2">
-					<Label title={'BOE Number'} />
+					<Label className="text-foreground" title={'BOE Number'} />
 					<Input
 						placeholder='Enter BOE Number'
 						name="boe"
@@ -82,7 +91,7 @@ export default function Form({ setOrder }) {
 					/>
 				</div>
 				<div className="mx-3 my-2">
-					<Label title={'Container Number'} />
+					<Label className="text-foreground" title={'Container Number'} />
 					<Input
 						placeholder='Enter Container Number'
 						name="container"
