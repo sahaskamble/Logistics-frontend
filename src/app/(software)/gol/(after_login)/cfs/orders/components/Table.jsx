@@ -11,7 +11,6 @@ export default function RequestList() {
     expand: 'containers,cfs'
   });
   const { user } = useAuth();
-  console.log(data);
 
   const handleStatusUpdate = async (id, status = 'Pending') => {
     try {
@@ -161,7 +160,7 @@ export default function RequestList() {
           <CircleCheckBig
             size={18}
             className="cursor-pointer text-primary"
-            onClick={() => handleStatusUpdate(row.original.id)}
+            onClick={() => handleStatusUpdate(row.original.id, row.original.status)}
           />
           <CircleX
             size={18}

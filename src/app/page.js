@@ -30,6 +30,15 @@ export default function Home() {
       />
 
       <Button
+        title={'GOL Side'}
+        icon={<ArrowUpRight />}
+        iconPosition="right"
+        className="rounded-xl"
+        variant={'outline'}
+        onClick={() => router.push('/gol/dashboard')}
+      />
+
+      <Button
         title={'Show Notification'}
         icon={<Bell />}
         iconPosition="right"

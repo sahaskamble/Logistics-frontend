@@ -13,7 +13,7 @@ import MultiSelectDatalist from "@/components/ui/MultiSelectDatalist";
 export default function Form() {
   const { user } = useAuth();
   const { data: containers } = useCollection('containers', {
-    filter: `ownedBy=${user.id}`
+    filter: `ownedBy=${user?.id}`
   });
   const { data: serviceProviders } = useCollection('allowed_service_providers', {
     expand: 'provider,provider.service'

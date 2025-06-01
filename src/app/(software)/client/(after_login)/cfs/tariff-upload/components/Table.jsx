@@ -1,11 +1,11 @@
 import { DataTable } from '@/components/ui/Table';
-import { Eye, Download, Trash, CircleCheckBig, CircleX } from 'lucide-react';
+import { Eye, Download, CircleCheckBig, CircleX } from 'lucide-react';
 import { useCollection } from '@/hooks/useCollection';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 export default function RequestTable() {
-  const { data, deleteItem, updateItem, mutation } = useCollection('cfs_tariffs_request', {
+  const { data, updateItem, mutation } = useCollection('cfs_tariffs_request', {
     expand: 'order,jobOrder,container,type'
   });
   const { user } = useAuth();

@@ -1,29 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Download, Eye, CircleCheckBig, CircleX, } from 'lucide-react';
+import { Search, Download, Eye, Trash, CircleCheckBig, CircleX, } from 'lucide-react';
 import Input from '@/components/ui/Input';
 import { useCollection } from '@/hooks/useCollection';
 import { useAuth } from '@/contexts/AuthContext';
+import EditForm from './EditForm';
 import { toast } from 'sonner';
 
 export default function MobileRequestList() {
-  const { data, updateItem, mutation } = useCollection('cfs_orders', {
-    expand: 'containers,cfs'
+  const { data, deleteItem, updateItem, mutation } = useCollection('cfs_tariffs_request', {
+    expand: 'order,jobOrder,container,type'
   });
   const { user } = useAuth();
   console.log(data);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [filteredRequests, setFilteredRequests] = useState([]);
 
   useEffect(() => {
     if (data?.length > 0) {
-      const filtered_Orders = data.filter(order => {
+      const filtered_requests = data.filter(request => {
         const matchesSearch =
-          order?.id?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
-          order?.consigneeName?.toLowerCase()?.includes(searchQuery.toLowerCase());
+          request?.id?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+          request?.expand?.container?.containerNo?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+          request?.order?.toLowerCase()?.includes(searchQuery.toLowerCase());
         return matchesSearch;
       });
-      setFilteredOrders(filtered_Orders);
+      setFilteredRequests(filtered_requests);
     }
   }, [data, searchQuery]);
 
@@ -47,7 +49,7 @@ export default function MobileRequestList() {
         golVerified: true,
         golVerifiedBy: user.id
       });
-      toast.success('Updated the Order');
+      toast.success('Updated the request');
     } catch (error) {
       console.log(error)
       toast.error(error.message);
@@ -59,12 +61,12 @@ export default function MobileRequestList() {
   return (
     <div className="border rounded-xl flex flex-col p-4">
       <div className="flex-1 overflow-y-auto">
-        <h2 className="text-xl font-semibold mb-4">Customer Orders</h2>
+        <h2 className="text-xl font-semibold mb-4">Tariff Requests</h2>
         <div className="px-4 py-8 flex items-center justify-between">
           <div className="relative flex-1 mr-2">
             <Input
               type="text"
-              placeholder="Search by Order ID / Consignee Name"
+              placeholder="Search by ID, Order ID or Container No."
               className="pl-8 w-full bg-accent"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -74,7 +76,7 @@ export default function MobileRequestList() {
         </div>
 
         <div className="px-4 pb-4">
-          {filteredOrders.map((request, index) => (
+          {filteredRequests.map((request, index) => (
             <div key={index} className="bg-[var(--accent)] rounded-lg p-3 mb-3 shadow-sm">
               <div className="flex justify-between items-start mb-1">
                 <div className="font-medium"># {request.id}</div>
@@ -84,11 +86,28 @@ export default function MobileRequestList() {
                   </span>
                 </div>
               </div>
-              <div className="text-sm text-gray-600 mb-1">Consignee: {request.consigneeName}</div>
-              <div className="text-sm text-gray-600 mb-1">CHA: {request.chaName}</div>
-              <p className="text-sm text-gray-600 mb-1">IGM:- {request.igmNo}</p>
-              <p className="text-sm text-gray-600 mb-1">BL:-{request.blNo}</p>
-              <p className="text-sm text-gray-600 mb-1">BOE: {request.boeNo}</p>
+              <div className="text-sm text-gray-600 mb-1">Order: {request.order}</div>
+              <div className="text-sm text-gray-600 mb-1">Container: {request?.expand?.container?.containerNo}</div>
+              <p className="text-sm text-gray-600 mb-1">Type:- {request.type}</p>
+              <p className="text-sm text-gray-600 mb-1">
+                From: {
+                  new Date(request?.fromDate)?.toLocaleDateString('en-US', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })
+                }
+              </p>
+              <p className="text-sm text-gray-600 mb-1">
+                To: {
+                  new Date(request?.toDate)?.toLocaleDateString('en-US', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })
+                }
+              </p>
+              <p className="text-sm text-gray-600 mb-1">Remarks: {request.remarks}</p>
               <div className="flex justify-end items-center pt-4">
                 <div className='flex gap-2 items-center'>
                   <Eye
@@ -105,6 +124,18 @@ export default function MobileRequestList() {
                     size={18}
                     className="cursor-pointer text-primary"
                     onClick={() => handleStatusUpdate(request.id, 'Rejected')}
+                  />
+                  <EditForm info={request} />
+                  <Trash
+                    size={18}
+                    className="cursor-pointer text-primary"
+                    onClick={async () => {
+                      console.log('Delete details for', row.original.id);
+                      const confirmation = confirm('Are you sure you want to delete this entry?');
+                      if (confirmation) {
+                        await deleteItem(request?.id);
+                      }
+                    }}
                   />
                   <Download
                     size={18}

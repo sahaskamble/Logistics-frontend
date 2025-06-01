@@ -5,47 +5,30 @@ import Form from './Form';
 import EditForm from './EditForm';
 import { useCollection } from '@/hooks/useCollection';
 
-export default function MobileTable({ serviceName = '' }) {
-  const { data, deleteItem } = useCollection('cfs_service_details', {
-    expand: 'order,jobOrder,container,type'
+export default function MobileTable() {
+  const { data, deleteItem } = useCollection('cfs_order_movement', {
+    expand: 'order'
   });
 
   const [filteredData, setFilteredData] = useState([]);
-  const [filteredServices, setFilteredServices] = useState([]);
+  const [filteredMovements, setFilteredMovements] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (data?.length > 0) {
-      setFilteredData(data.filter((item) => item?.expand?.type?.title === serviceName))
+      setFilteredData(data)
     }
   }, [data]);
-
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Completed':
-        return 'bg-green-100 text-green-800 border border-green-500';
-      case 'Pending':
-        return 'bg-yellow-100 text-yellow-800 border border-yellow-500';
-      case 'Cancelled':
-        return 'bg-red-100 text-red-800 border border-red-500';
-      default:
-        return 'bg-gray-300 text-gray-800 border border-gray-800';
-    }
-  };
 
 
   useEffect(() => {
     if (filteredData?.length > 0) {
       const filtered_data = filteredData.filter(entry => {
         const matchesSearch =
-          entry?.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          entry?.expand?.container?.containerNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          entry?.order.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          entry?.jobOrder.toLowerCase().includes(searchQuery.toLowerCase());
+          entry?.order.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesSearch;
       });
-      setFilteredServices(filtered_data);
+      setFilteredMovements(filtered_data);
     }
   }, [data, filteredData, searchQuery])
 
@@ -53,7 +36,7 @@ export default function MobileTable({ serviceName = '' }) {
   return (
     <div className="border rounded-xl bg-accent flex flex-col p-4">
       <div className="flex-1 overflow-y-auto">
-        <h2 className="text-xl font-semibold text-foreground mb-4">{serviceName} List</h2>
+        <h2 className="text-xl font-semibold text-foreground mb-4">Order Movements</h2>
         <div className="flex justify-end items-center my-4">
           <Form />
         </div>
@@ -62,7 +45,7 @@ export default function MobileTable({ serviceName = '' }) {
           <div className="relative flex-1 mr-2">
             <Input
               type="text"
-              placeholder="Search by ID, Order Id, Job Order Id or Container No."
+              placeholder="Search by Order Id"
               className="pl-8 w-full bg-accent text-xs"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -72,16 +55,10 @@ export default function MobileTable({ serviceName = '' }) {
         </div>
 
         <div className="px-4 pb-4">
-          {filteredServices.map((request, index) => (
+          {filteredMovements.map((request, index) => (
             <div key={index} className="border rounded-lg p-3 mb-3 shadow-sm">
-              <div className="flex justify-between items-center mb-4">
-                <span className={`text-xs px-2 py-1 rounded-full ${getStatusClass(request?.status)}`}>
-                  {request?.status}
-                </span>
-              </div>
-              <h1 className="font-medium"># {request?.id}</h1>
-              <p className="text-sm text-gray-600 mb-1">Order: {request?.order}</p>
-              <p className="text-sm text-gray-600 mb-1">Job Order: {request?.jobOrder}</p>
+              <h1 className="font-medium">Order: {request?.order}</h1>
+              <p className="text-sm font-semibold text-gray-600 mb-1">Order Status: {request?.status}</p>
               <p className="text-sm text-gray-600 mb-1">
                 Date: {
                   new Date(request?.date)?.toLocaleDateString('en-US', {
@@ -91,17 +68,9 @@ export default function MobileTable({ serviceName = '' }) {
                   })
                 }
               </p>
-              <p className="text-sm text-gray-600 mb-1">Agent: {request?.agent}</p>
-              {
-                request?.receiptNo && (
-                  <p className="text-sm text-gray-600 mb-1">Receipt No: {request?.type}</p>
-                )
-              }
-              {
-                request?.remarks && (
-                  <p className="text-sm text-gray-600 mb-1">Remarks: {request.remarks}</p>
-                )
-              }
+              <p className="text-sm text-gray-600 mb-1">IGM:- {request?.expand?.order?.igmNo}</p>
+              <p className="text-sm text-gray-600 mb-1">BL:-{request?.expand?.order?.blNo}</p>
+              <p className="text-sm text-gray-600 mb-1">BOE: {request?.expand?.order?.boeNo}</p>
               <div className="flex justify-end items-center pt-4">
                 <div className='flex gap-2 items-center'>
                   <Eye

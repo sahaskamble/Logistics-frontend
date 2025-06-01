@@ -46,7 +46,7 @@ export default function Table() {
 			accessorKey: 'ownedBy',
 			header: 'Owned By',
 			filterable: true,
-			cell: ({ row }) => <div>{row.original.expand.ownedBy.username}</div>,
+			cell: ({ row }) => <div>{row.original?.expand?.ownedBy?.name}</div>,
 		},
 		{
 			id: 'size',
@@ -98,11 +98,11 @@ export default function Table() {
 	];
 
 	useEffect(() => {
-		if (data?.length > 0 && user?.id) {
-			const filtered_data = data.filter((item) => item.ownedBy === user?.id);
-			setFilteredData(filtered_data);
+		if (data?.length > 0 || user?.id) {
+			// const filtered_data = data.filter((item) => item.ownedBy === user?.id);
+			setFilteredData(data);
 		}
-	}, [data, user]);
+	}, [data]);
 
 
 	return (

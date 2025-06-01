@@ -7,6 +7,7 @@ import RequestTable from "./components/Table";
 import MobileTable from "@/app/(software)/gol/(after_login)/components/MobileTable";
 import Table from "@/app/(software)/gol/(after_login)/components/Table";
 import { useIsMobile } from "@/hooks/use-mobile";
+import MobileRequestList from "./components/MobileTable";
 
 export default function TariffUpload() {
 	const { setTitle } = useSidebar();
@@ -24,7 +25,13 @@ export default function TariffUpload() {
 				</TabsList>
 
 				<TabsContent value="requests" className="md:p-4 w-full h-screen">
-					<RequestTable />
+					{
+						useIsMobile() ? (
+							<MobileRequestList />
+						) : (
+							<RequestTable />
+						)
+					}
 				</TabsContent>
 
 				<TabsContent value="uploads" className="md:p-4 w-full h-screen">
