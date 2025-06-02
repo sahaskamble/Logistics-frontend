@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Upload, Plus } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
@@ -12,9 +12,7 @@ import MultiSelectDatalist from "@/components/ui/MultiSelectDatalist";
 
 export default function Form() {
   const { user } = useAuth();
-  const { data: containers } = useCollection('containers', {
-    filter: `ownedBy=${user?.id}`
-  });
+  const { data: containers } = useCollection('containers');
   const { data: serviceProviders } = useCollection('allowed_service_providers', {
     expand: 'provider,provider.service'
   });
@@ -34,7 +32,7 @@ export default function Form() {
     files: []
   });
   const [selectedContainers, setSelectedContainers] = useState([])
-
+  const [filteredContainers, setFilteredContainers] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = (e) => {
@@ -104,6 +102,13 @@ export default function Form() {
       setIsOpen(false);
     }
   };
+
+  useEffect(() => {
+    console.log('Containers', containers);
+    if (containers?.length > 0) {
+      setFilteredContainers(containers);
+    }
+  }, [containers]);
 
   return (
     <Dialog
@@ -249,11 +254,11 @@ export default function Form() {
         <Label title={'Containers'} />
         <MultiSelectDatalist
           label="Select Containers"
-          options={containers}
+          options={filteredContainers}
           value={selectedContainers}
           onValueChange={setSelectedContainers}
-          getOptionLabel={(container) => `${container.containerNo} - ${container.size}`}
-          getOptionValue={(container) => container.id}
+          getOptionLabel={(container) => `${container?.containerNo} - ${container?.size}`}
+          getOptionValue={(container) => container?.id}
           placeholder="Choose containers..."
         />
       </div>

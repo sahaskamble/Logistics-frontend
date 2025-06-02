@@ -12,36 +12,39 @@ import { FilterCFS } from "./components/Filter";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Select, SelectItem } from "@/components/ui/Select";
 import LoginPopUp from "./components/LoginPopUp";
+import { useCollection } from "@/hooks/useCollection";
+import RenderRatings from "@/components/ui/renderRatings";
+import { PB_URL } from "@/constants/url";
+import { RequestPopup } from "./components/RequestPopup";
+import UrgentRequestPopup from "./components/UrgentRequestPopup";
 
 export default function ClientHomePage() {
-	const [currentService, setCurrentService] = useState('cfs');
-	const [serviceTitle, setServiceTitle] = useState('CFS');
-	const [filteredServices, setFilteredServices] = useState(ServiceProviders.filter((provider) => provider.serviceId === currentService));
+	const { data: providers } = useCollection('service_provider', {
+		expand: 'service'
+	});
+	const [currentService, setCurrentService] = useState('CFS');
+	const [filteredServices, setFilteredServices] = useState([]);
 	const [filter, setFilter] = useState('');
 	const [SearchQuery, setSearchQuery] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
 	const [isPopup, setIsPopup] = useState(true);
-	const [longDismissal, setLongDismissal] = useState(false)
 
 	useEffect(() => {
-		setServiceTitle(servicesList.find((service) => service.id === currentService).label);
-		setFilteredServices(ServiceProviders.filter(
-			(provider) => provider.serviceId === currentService && (
-				filter === 'location'
-					? provider.location.toLowerCase().includes(SearchQuery.toLowerCase())
-					: provider.title.toLowerCase().includes(SearchQuery.toLowerCase())
-			)
-		));
-	}, [currentService, SearchQuery]);
+		// setServiceTitle(servicesList?.find((service) => service?.label === currentService).label);
+		// setFilteredServices(ServiceProviders.filter(
+		// 	(provider) => provider.serviceId === currentService && (
+		// 		filter === 'location'
+		// 			? provider.location.toLowerCase().includes(SearchQuery.toLowerCase())
+		// 			: provider.title.toLowerCase().includes(SearchQuery.toLowerCase())
+		// 	)
+		// ));
 
+		if (providers?.length > 0) {
+			setFilteredServices(providers);
+			console.log('Providers', providers);
+		}
 
-	useEffect(() => {
-		const preActiveLogin = setInterval(() => {
-			const currentTime = Date.now();
-			const timeToWait = longDismissal ? 15 * 60 * 1000 : 15 * 1000;
-
-		}, 10000);
-	}, [])
+	}, [currentService, SearchQuery, providers]);
 
 
 	const handlePopUpClose = () => {
@@ -52,15 +55,17 @@ export default function ClientHomePage() {
 
 	return (
 		<section className={`w-full h-auto items-center justify-center`}>
+			{/* -- Services List -- */}
 			{
 				useIsMobile() ?
 					<MobileHeaderLayout currentService={currentService} setCurrentService={setCurrentService} />
 					:
 					<HeaderLayout currentService={currentService} setCurrentService={setCurrentService} />
 			}
+
 			<section className="p-4">
 				<div className="flex items-center justify-between">
-					<h1 className="font-bold text-2xl">{serviceTitle} Service Providers</h1>
+					<h1 className="font-bold text-2xl">{currentService} Service Providers</h1>
 					<Dialog
 						trigger={<Button title={'Filters'} icon={<SlidersHorizontalIcon size={20} />} variant={''} iconPosition="right" className="rounded-md bg-[var(--primary)]" />}
 						title="Filters"
@@ -71,13 +76,14 @@ export default function ClientHomePage() {
 					</Dialog>
 				</div>
 
+				{/* Search */}
 				<div className="flex items-center justify-between gap-4 w-full mt-10">
 					<div className="flex items-center justify-between gap-4 w-full">
 						<div className="flex items-center justify-between relative gap-4 w-full">
 							<Search className="absolute left-2 top-2 p-1 h-6 w-6 text-muted-foreground" />
 							<input
 								className={`flex pl-10 h-11 w-full bg-[var(--accent)] rounded-md border border-input text-[var(--foreground)] px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-[var(--foreground)] placeholder:text-[var(--secondary)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm`}
-								placeholder={!useIsMobile() ? `Search ${serviceTitle} Service Providers...` : 'Search'}
+								placeholder={!useIsMobile() ? `Search ${currentService} Service Providers...` : 'Search'}
 								value={SearchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
 							/>
@@ -89,16 +95,17 @@ export default function ClientHomePage() {
 					</div>
 				</div>
 
+				{/* -- Providers List -- */}
 				<div className="flex flex-col md:gap-10 gap-4 pt-6">
 					{filteredServices.map((provider) => (
 						<ServiceCard
 							key={provider.id}
 							title={provider.title}
 							location={provider.location}
-							rating={provider.rating}
-							tags={provider.tags}
+							rating={provider?.rating || 0}
+							tags={provider.tags.tags}
 							description={provider.description}
-							images={provider.images}
+							images={provider.files || []}
 							id={provider.id}
 						/>
 					))}
@@ -119,17 +126,22 @@ const ServiceCard = ({ title, location, rating, tags, description, images, id })
 	const prevImage = () => {
 		setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
 	};
+
 	return (
 		<div className="flex flex-col bg-[var(--accent)] md:flex-row rounded-lg shadow-md overflow-hidden border min-h-96 p-4 md:p-8 gap-10">
 			{/* Left side - Image slider */}
 			<div className="relative w-full md:w-2/5 md:h-96 h-64 rounded-xl overflow-hidden">
-				<Image
-					src={images[currentImageIndex].src}
-					alt={`${title} - Image ${currentImageIndex + 1}`}
-					width={5000}
-					height={5000}
-					className="w-full h-full object-cover"
-				/>
+				{
+					images?.length > 0 && (
+						<Image
+							src={`${PB_URL}/api/files/service_provider/${id}/${images[currentImageIndex]}`}
+							alt={`${title} - Image ${currentImageIndex + 1}`}
+							width={5000}
+							height={5000}
+							className="w-full h-full object-cover"
+						/>
+					)
+				}
 
 				{/* Image navigation buttons */}
 
@@ -175,20 +187,14 @@ const ServiceCard = ({ title, location, rating, tags, description, images, id })
 						}
 					</div>
 					<div className="flex items-center mt-6">
-						{Array(5).fill(0).map((_, i) => (
-							<Star
-								key={i}
-								className={`h-4 w-4 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-									}`}
-							/>
-						))}
+						<RenderRatings rating={rating.toFixed(1)} />
 						<span className="ml-1 text-sm text-gray-600">{rating.toFixed(1)}</span>
 					</div>
 					<p className="mt-6">{description}</p>
 				</div>
 				<div className="flex flex-wrap gap-4 mt-4">
-					<Button title={'Request Price'} className="rounded-md" />
-					<Button title={'Emergency Request'} className="rounded-md md:block hidden md:text-base text-xs" variant={'secondary'} />
+					<RequestPopup provider={id} />
+					<UrgentRequestPopup provider={id} />
 					<Button title={'View Details'} className="rounded-md" />
 				</div>
 			</div>

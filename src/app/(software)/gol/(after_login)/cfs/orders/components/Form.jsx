@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Upload, Plus } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
@@ -32,6 +32,7 @@ export default function Form() {
     files: []
   });
   const [selectedContainers, setSelectedContainers] = useState([])
+  const [filteredContainers, setFilteredContainers] = useState([]);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -102,6 +103,14 @@ export default function Form() {
       setIsOpen(false);
     }
   };
+
+  useEffect(() => {
+    if (containers?.length > 0) {
+      setFilteredContainers(containers);
+      console.log('Containers', containers);
+    }
+  }, [containers]);
+
 
   return (
     <Dialog
@@ -243,18 +252,20 @@ export default function Form() {
       </div>
 
 
+      {/*
       <div className='flex flex-col gap-2 mt-4'>
         <Label title={'Containers'} />
         <MultiSelectDatalist
           label="Select Containers"
-          options={containers}
+          options={filteredContainers}
           value={selectedContainers}
           onValueChange={setSelectedContainers}
-          getOptionLabel={(container) => `${container.containerNo} - ${container.size}`}
-          getOptionValue={(container) => container.id}
+          getOptionLabel={(container) => `${container?.containerNo} - ${container?.size}`}
+          getOptionValue={(container) => container?.id}
           placeholder="Choose containers..."
         />
       </div>
+      */}
 
       <div className='flex flex-col gap-2 mt-4'>
         <Label title={'Upload Documents'} />

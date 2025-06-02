@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 
 // Multi-Select Component
 export default function MultiSelectDatalist({
-	options = [],
+	options = options ?? [],
 	value = [],
 	onValueChange,
 	placeholder = "Select items...",
@@ -39,13 +39,17 @@ export default function MultiSelectDatalist({
 	}, []);
 
 	// Filter options based on search and exclude already selected
-	const filteredOptions = options.filter(option => {
-		const optionLabel = getOptionLabel(option).toLowerCase();
-		const optionValue = getOptionValue(option);
-		const matchesSearch = optionLabel.includes(searchValue.toLowerCase());
-		const notSelected = !value.includes(optionValue);
-		return matchesSearch && notSelected;
-	});
+	let filteredOptions = [];
+	if (options?.length > 0) {
+		console.log(options)
+		filteredOptions = options.filter(option => {
+			const optionLabel = getOptionLabel(option).toLowerCase();
+			const optionValue = getOptionValue(option);
+			const matchesSearch = optionLabel.includes(searchValue.toLowerCase());
+			const notSelected = !value.includes(optionValue);
+			return matchesSearch && notSelected;
+		});
+	}
 
 	// Get selected option objects
 	const selectedOptions = options.filter(option =>

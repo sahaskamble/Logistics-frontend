@@ -1,4 +1,4 @@
-import { ArrowDown, Bell, Boxes, Container, CreditCard, FastForward, FileSearch2, FileText, LayoutDashboard, LayoutGrid, MailQuestion, MapPinned, Package, Receipt, ReceiptText, Scale, Scan, Truck, UploadIcon, User } from "lucide-react";
+import { ArrowDown, Bell, Boxes, Container, CreditCard, FastForward, FileSearch2, FileText, LayoutDashboard, LayoutGrid, MailQuestion, MapPinned, Package, Receipt, ReceiptIndianRupee, ReceiptText, Scale, Scan, Truck, UploadIcon, User } from "lucide-react";
 
 export const navLinks = [
 	{
@@ -89,7 +89,8 @@ export const navLinks = [
 		access: 'GOL',
 		subItems: [
 			{ label: "Orders", href: "/gol/cfs/orders", icon: Package, access: 'GOL' },
-			{ label: "Requests", href: "/gol/cfs/requests", icon: MailQuestion, access: 'GOL', },
+			{ label: "Service Requests", href: "/gol/cfs/requests", icon: MailQuestion, access: 'GOL', },
+			{ label: "Pricing Requests", href: "/gol/cfs/pricing-requests", icon: ReceiptIndianRupee, access: 'GOL', },
 			{ label: "Tariff Upload", href: "/gol/cfs/tariff-upload", access: 'GOL', icon: UploadIcon },
 		]
 	},
