@@ -2,6 +2,8 @@ import React from 'react';
 import { DataTable } from '@/components/ui/Table';
 import { Eye, Download, } from 'lucide-react';
 import { useCollection } from '@/hooks/useCollection';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileDataTable from '@/components/ui/MobileDataTable';
 
 const Table = () => {
   const { data, deleteItem } = useCollection('cfs_job_order', {
@@ -121,13 +123,21 @@ const Table = () => {
   ];
 
   return (
-    <div className="border-2 bg-accent p-4 rounded-xl mt-8">
-      <h1 className="text-lg font-semibold">Job Orders</h1>
-
-      <DataTable
-        columns={columns}
-        data={data}
-      />
+    <div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
+      <h1 className="text-xl font-semibold md:p-0 p-4">Job Orders</h1>
+      {
+        useIsMobile() ? (
+          <MobileDataTable
+            columns={columns}
+            data={data}
+          />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={data}
+          />
+        )
+      }
     </div>
   );
 };

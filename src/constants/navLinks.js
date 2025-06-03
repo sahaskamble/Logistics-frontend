@@ -1,4 +1,4 @@
-import { ArrowDown, Bell, Boxes, Container, CreditCard, FastForward, FileSearch2, FileText, LayoutDashboard, LayoutGrid, MailQuestion, MapPinned, Package, Receipt, ReceiptIndianRupee, ReceiptText, Scale, Scan, Truck, UploadIcon, User } from "lucide-react";
+import { ArrowDown, Bell, Boxes, Container, CreditCard, FastForward, FileSearch2, FileText, LayoutDashboard, LayoutGrid, MailQuestion, MapPinned, Package, Receipt, ReceiptIndianRupee, Scale, Scan, Truck, UploadIcon, User } from "lucide-react";
 
 export const navLinks = [
 	{
@@ -8,19 +8,14 @@ export const navLinks = [
 		access: 'Customer',
 	},
 	{
-		label: "Service Request",
-		href: "/customer/service-requests",
-		icon: ReceiptText,
-		access: 'Customer',
-	},
-	{
 		label: "CFS",
 		href: '',
 		icon: Truck,
 		access: 'Customer',
 		subItems: [
 			{ label: "Orders", href: "/customer/cfs/orders", access: 'Customer', icon: Package },
-			{ label: "Requests", href: "/customer/cfs/requests", icon: MailQuestion, access: 'Customer', },
+			{ label: "Pricing Requests", href: "/customer/cfs/pricing-requests", icon: ReceiptIndianRupee, access: 'Customer', },
+			{ label: "Service Requests", href: "/customer/cfs/requests", icon: MailQuestion, access: 'Customer', },
 			{ label: "Services", href: "/customer/cfs/services", access: 'Customer', icon: FileSearch2 },
 			{ label: "Track & Trace", href: "/customer/cfs/track-trace", access: 'Customer', icon: MapPinned },
 			{ label: "Tariff Upload", href: "/customer/cfs/tariff-upload", access: 'Customer', icon: UploadIcon },

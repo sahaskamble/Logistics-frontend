@@ -1,11 +1,13 @@
-import { Download, Eye, LayoutGrid, Trash } from 'lucide-react';
+import { Download, Eye, Trash } from 'lucide-react';
 import { DataTable } from '@/components/ui/Table';
 import { useCollection } from '@/hooks/useCollection';
 import Badge from '@/components/ui/Badge';
 import Form from './Form';
 import EditForm from './EditForm';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileDataTable from '@/components/ui/MobileDataTable';
 
-export default function RequestList() {
+export default function OrdersList() {
   const { data, deleteItem } = useCollection('cfs_orders', {
     expand: 'containers,cfs'
   });
@@ -170,12 +172,32 @@ export default function RequestList() {
   };
 
   return (
-    <div className="border rounded-lg bg-accent p-6 mb-4">
-      <div className="flex items-center justify-between">
-        <h1 className='font-semibold text-2xl'>My Orders</h1>
-        <Form />
-      </div>
-      <DataTable columns={columns} data={data} />
+    <div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
+      {
+        useIsMobile() ? (
+          <>
+            <h1 className="text-xl font-semibold p-4">My Orders</h1>
+            <div className="flex justify-end p-4">
+              <Form />
+            </div>
+            <MobileDataTable
+              columns={columns}
+              data={data}
+            />
+          </>
+        ) : (
+          <>
+            <div className="flex items-center justify-between gap-4">
+              <h1 className="text-lg font-semibold">My Orders</h1>
+              <Form />
+            </div>
+            <DataTable
+              columns={columns}
+              data={data}
+            />
+          </>
+        )
+      }
     </div>
   )
 };

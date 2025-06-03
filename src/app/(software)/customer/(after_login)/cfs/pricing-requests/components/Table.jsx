@@ -8,8 +8,8 @@ import MobileDataTable from '@/components/ui/MobileDataTable';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function RequestTable() {
-  const { data, deleteItem, updateItem, mutation } = useCollection('cfs_service_requests', {
-    expand: 'user,order,serviceType'
+  const { data, deleteItem, updateItem, mutation } = useCollection('cfs_pricing_request', {
+    expand: 'user,serviceProvider'
   });
   const { user } = useAuth();
 
@@ -31,39 +31,46 @@ export default function RequestTable() {
 
   const columns = [
     {
-      id: 'id',
-      accessorKey: 'id',
-      header: 'Request ID',
+      id: 'serviceProvider',
+      accessorKey: 'serviceProvider',
+      header: 'Service Provider',
       filterable: true,
-      cell: ({ row }) => <div>{row.original.id}</div>,
+      cell: ({ row }) => <div>{row.original?.expand?.serviceProvider?.title}</div>,
     },
     {
-      id: 'order-no',
-      accessorKey: 'order.id',
-      header: 'Order ID',
+      id: 'type',
+      accessorKey: 'type',
+      header: 'Type',
       filterable: true,
-      cell: ({ row }) => <div>{row.original.order}</div>,
+      cell: ({ row }) => <div>{row.original?.type}</div>,
     },
     {
-      id: 'remarks',
-      accessorKey: 'remarks',
-      header: 'Your Remarks',
+      id: 'preferableRate',
+      accessorKey: 'preferableRate',
+      header: 'Preferable Rate',
       filterable: true,
-      cell: ({ row }) => <div>{row.original.customerRemarks}</div>,
+      cell: ({ row }) => <div> Rs. {row.original?.preferableRate?.toLocaleString()} </div>,
     },
     {
-      id: 'reason',
-      accessorKey: 'reason',
-      header: 'Reason',
+      id: 'noOfContainers',
+      accessorKey: 'noOfContainers',
+      header: 'No. of Containers',
       filterable: true,
-      cell: ({ row }) => <div>{row.original.clientReason}</div>,
+      cell: ({ row }) => <div> {row.original?.noOfContainers?.toLocaleString()} </div>,
     },
     {
-      id: 'serviceType',
-      accessorKey: 'serviceType',
-      header: 'Service Type',
+      id: 'avgContainerSize',
+      accessorKey: 'avgContainerSize',
+      header: 'Avg. Container Size',
       filterable: true,
-      cell: ({ row }) => <div>{row.original?.expand?.serviceType?.title}</div>,
+      cell: ({ row }) => <div> {row.original?.avgContainerSize?.toLocaleString()} </div>,
+    },
+    {
+      id: 'containersPerMonth',
+      accessorKey: 'containersPerMonth',
+      header: 'Containers Per Month',
+      filterable: true,
+      cell: ({ row }) => <div> {row.original?.containersPerMonth?.toLocaleString()} </div>,
     },
     {
       id: 'status',
@@ -83,11 +90,6 @@ export default function RequestTable() {
             size={18}
             className="cursor-pointer text-primary"
             onClick={() => console.log('View details for', row.original.id)}
-          />
-          <CircleCheckBig
-            size={18}
-            className="cursor-pointer text-primary"
-            onClick={() => handleStatusUpdate(row.original.id)}
           />
           <EditForm info={row.original} />
           <Trash
@@ -127,7 +129,9 @@ export default function RequestTable() {
           useIsMobile() ? (
             <MobileDataTable
               columns={columns}
-              data={data}
+              data={data?.length > 0 ? data : []}
+              displayButtons={true}
+              displayFilters={true}
             />
           ) : (
             <DataTable

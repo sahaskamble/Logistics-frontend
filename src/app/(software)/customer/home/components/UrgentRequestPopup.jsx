@@ -86,7 +86,7 @@ export default function UrgentRequestPopup({ provider }) {
 			title={'Request Pricing'}
 			open={isOpen}
 			onOpenChange={setIsOpen}
-			trigger={<Button title={'Urgent Price'} className="rounded-md md:block hidden md:text-base text-xs" variant={'secondary'} />}
+			trigger={<Button title={'Urgent Price'} className="rounded-md md:text-base text-xs" variant={'secondary'} />}
 		>
 			<div className='md:w-[40dvw] grid gap-4'>
 				<div className='flex flex-col gap-2'>

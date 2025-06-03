@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from '@/components/ui/Table';
 import { Eye, Download } from 'lucide-react';
 import { useCollection } from '@/hooks/useCollection';
+import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Table = ({ serviceName = '' }) => {
   const { data } = useCollection('cfs_service_details', {
@@ -136,13 +138,21 @@ const Table = ({ serviceName = '' }) => {
 
 
   return (
-    <div className="border-2 bg-accent p-4 rounded-xl mt-8">
-      <h1 className="text-lg font-semibold">{serviceName} List</h1>
-
-      <DataTable
-        columns={columns}
-        data={filteredData}
-      />
+    <div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
+      <h1 className="text-xl font-semibold md:p-0 p-4">{serviceName} List</h1>
+      {
+        useIsMobile() ? (
+          <MobileDataTable
+            columns={columns}
+            data={filteredData}
+          />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={filteredData}
+          />
+        )
+      }
     </div>
   );
 };

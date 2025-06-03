@@ -1,9 +1,10 @@
-// import React, { useEffect, useState } from 'react';
 import { DataTable } from '@/components/ui/Table';
 import { Eye, Download, Trash } from 'lucide-react';
 import Form from './Form';
 import { useCollection } from '@/hooks/useCollection';
 import EditForm from './EditForm';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileDataTable from '@/components/ui/MobileDataTable';
 
 export default function RequestTable() {
   const { data, deleteItem } = useCollection('cfs_tariffs_request', {
@@ -136,16 +137,32 @@ export default function RequestTable() {
 
 
   return (
-    <div className="border-2 bg-accent p-4 rounded-xl mt-8">
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-lg font-semibold">Requests List</h1>
-        <Form serviceName={''} />
-      </div>
-
-      <DataTable
-        columns={columns}
-        data={data}
-      />
+    <div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
+      {
+        useIsMobile() ? (
+          <>
+            <h1 className="text-xl font-semibold p-4">Requests List</h1>
+            <div className="flex justify-end p-4">
+              <Form />
+            </div>
+            <MobileDataTable
+              columns={columns}
+              data={data}
+            />
+          </>
+        ) : (
+          <>
+            <div className="flex items-center justify-between gap-4">
+              <h1 className="text-lg font-semibold">Requests List</h1>
+              <Form />
+            </div>
+            <DataTable
+              columns={columns}
+              data={data}
+            />
+          </>
+        )
+      }
     </div>
   );
 };

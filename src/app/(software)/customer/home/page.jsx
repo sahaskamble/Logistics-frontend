@@ -40,8 +40,9 @@ export default function ClientHomePage() {
 		// ));
 
 		if (providers?.length > 0) {
-			setFilteredServices(providers);
-			console.log('Providers', providers);
+			setFilteredServices(providers.filter((provider) => {
+				return provider?.expand?.service?.find((service) => service?.title === currentService)
+			}));
 		}
 
 	}, [currentService, SearchQuery, providers]);

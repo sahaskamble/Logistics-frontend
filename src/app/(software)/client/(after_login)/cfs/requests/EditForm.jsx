@@ -45,8 +45,8 @@ export default function EditForm({ info }) {
 		try {
 			await updateItem(formData.id, {
 				clientReason: formData.clientReason,
-				golVerified: true,
-				golVerifiedBy: user?.id,
+				merchantVerified: true,
+				merchantVerifiedBy: user?.id,
 				status: formData.status,
 			});
 			toast.success('Rejected the request');

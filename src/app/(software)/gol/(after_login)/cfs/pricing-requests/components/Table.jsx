@@ -4,6 +4,8 @@ import { useCollection } from '@/hooks/useCollection';
 import EditForm from './EditForm';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function RequestTable() {
   const { data, deleteItem, updateItem, mutation } = useCollection('cfs_pricing_request', {
@@ -138,12 +140,23 @@ export default function RequestTable() {
 
   return (
     <div>
-      <div className="border-2 bg-accent p-4 rounded-xl mt-8">
-        <h1 className="text-lg font-semibold">Requests List</h1>
-        <DataTable
-          columns={columns}
-          data={data}
-        />
+      <div className="border-2 md:bg-accent md:p-4 rounded-xl md:mt-8">
+        <h1 className="text-xl font-semibold md:p-0 p-4">Requests List</h1>
+        {
+          useIsMobile() ? (
+            <MobileDataTable
+              columns={columns}
+              data={data?.length > 0 ? data : []}
+              displayButtons={true}
+              displayFilters={true}
+            />
+          ) : (
+            <DataTable
+              columns={columns}
+              data={data}
+            />
+          )
+        }
       </div>
     </div>
   );

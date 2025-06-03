@@ -2,17 +2,18 @@ import pbclient from "@/lib/db";
 import { useCallback, useEffect, useState } from "react";
 
 export function useCollection(collectionName, options = {}) {
-	const pb = pbclient;
+	// const pb = pbclient;
 	const [data, setData] = useState(null);
 	const [error, setError] = useState(null);
 
 	const fetchData = useCallback(async () => {
 		try {
+			pbclient.autoCancellation(false);
 			const res = await pbclient.collection(collectionName).getFullList(options);
 			setData(res);
 		} catch (err) {
 			setError(err);
-			throw new Error(err);
+			console.log(err)
 		}
 	}, [collectionName, options, pbclient]);
 
@@ -22,7 +23,7 @@ export function useCollection(collectionName, options = {}) {
 			setData(res);
 		} catch (err) {
 			setError(err);
-			throw new Error(err);
+			console.log(err)
 		}
 	}, [collectionName, pbclient]);
 
@@ -32,7 +33,7 @@ export function useCollection(collectionName, options = {}) {
 			setData(res);
 		} catch (err) {
 			setError(err);
-			throw new Error(err);
+			console.log(err)
 		}
 	}, [collectionName, pbclient]);
 
@@ -43,7 +44,7 @@ export function useCollection(collectionName, options = {}) {
 			mutation();
 		} catch (err) {
 			setError(err);
-			throw new Error(err);
+			console.log(err)
 		}
 	}, [collectionName, pbclient]);
 

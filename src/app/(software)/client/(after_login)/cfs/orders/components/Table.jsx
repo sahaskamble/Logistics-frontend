@@ -3,8 +3,10 @@ import { DataTable } from '@/components/ui/Table';
 import { useCollection } from '@/hooks/useCollection';
 import Badge from '@/components/ui/Badge';
 import { useAuth } from '@/contexts/AuthContext';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileDataTable from '@/components/ui/MobileDataTable';
 
-export default function RequestList() {
+export default function OrdersList() {
   const { data, updateItem, mutation } = useCollection('cfs_orders', {
     expand: 'containers,cfs',
     filter: `golVerified=true`
@@ -186,9 +188,21 @@ export default function RequestList() {
   };
 
   return (
-    <div className="border rounded-lg bg-accent p-6 mb-4">
-      <h1 className='font-semibold text-2xl'>Customer Orders</h1>
-      <DataTable columns={columns} data={data} />
+    <div className="border-2 md:bg-accent md:p-4 rounded-xl md:mt-8">
+      <h1 className="text-xl font-semibold md:p-0 p-4">Customer Orders</h1>
+      {
+        useIsMobile() ? (
+          <MobileDataTable
+            columns={columns}
+            data={data}
+          />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={data}
+          />
+        )
+      }
     </div>
   )
 };

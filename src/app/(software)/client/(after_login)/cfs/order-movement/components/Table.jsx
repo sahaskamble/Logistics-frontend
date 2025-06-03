@@ -3,6 +3,8 @@ import { useCollection } from '@/hooks/useCollection'
 import { Download, Eye, Trash } from 'lucide-react'
 import Form from './Form';
 import EditForm from './EditForm';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileDataTable from '@/components/ui/MobileDataTable';
 
 export default function Table() {
 	const { data, deleteItem } = useCollection('cfs_order_movement', {
@@ -43,7 +45,7 @@ export default function Table() {
 			accessorKey: 'status',
 			header: 'Status',
 			filterable: true,
-			cell: ({ row }) => <div>{row.original.status}</div>,
+			cell: ({ row }) => <div className='font-semibold'>{row.original.status}</div>,
 		},
 		{
 			id: 'remarks',
@@ -101,13 +103,33 @@ export default function Table() {
 
 
 	return (
-		<div className='w-full bg-accent border shadow-md shadow-foreground/40 rounded-lg p-6'>
-			<div className="flex gap-4 items-center justify-between">
-				<h1 className="text-2xl font-semibold">Order Movements</h1>
-				<Form />
-			</div>
+		<div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
+			{
+				useIsMobile() ? (
+					<>
+						<h1 className="text-xl font-semibold p-4">Order Movements</h1>
+						<div className="flex justify-end p-4">
+							<Form />
+						</div>
+						<MobileDataTable
+							columns={columns}
+							data={data}
+						/>
+					</>
+				) : (
+					<>
+						<div className="flex items-center justify-between gap-4">
+							<h1 className="text-lg font-semibold">Order Movements</h1>
+							<Form />
+						</div>
 
-			<DataTable columns={columns} data={data} />
+						<DataTable
+							columns={columns}
+							data={data}
+						/>
+					</>
+				)
+			}
 		</div>
 	)
 }
