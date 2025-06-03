@@ -2,23 +2,23 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "./components/Table";
 import { useIsMobile } from "@/hooks/use-mobile";
-import MobileTable from "./components/MobileTable";
+import MobileTable from "@/app/(software)/client/components/MobileTable";
+import Table from "@/app/(software)/client/components/Table";
 
 export default function ContainerStagingPage() {
 	const { setTitle } = useSidebar();
 	useEffect(() => {
-		setTitle('Container Stagings')
+		setTitle('Container Staging')
 	}, []);
 
 	return (
 		<section className="grid gap-8">
 			{
 				useIsMobile() ? (
-					<MobileTable />
+					<MobileTable serviceName="Container Staging" />
 				) : (
-					<Table />
+					<Table serviceName="Container Staging" />
 				)
 			}
 		</section>

@@ -2,25 +2,26 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "./components/Table";
-import MobileTable from "./components/MobileTable";
 import { useIsMobile } from "@/hooks/use-mobile";
+import MobileTable from "@/app/(software)/customer/components/MobileTable";
+import Table from "@/app/(software)/customer/components/Table";
 
-export default function TaxInvoicesPage() {
+export default function TaxInvoicePage() {
 	const { setTitle } = useSidebar();
 	useEffect(() => {
-		setTitle('Tax Invoices')
+		setTitle('Tax Invoice')
 	}, []);
 
 	return (
 		<section className="grid gap-8">
 			{
 				useIsMobile() ? (
-					<MobileTable />
+					<MobileTable serviceName="Tax Invoice" />
 				) : (
-					<Table />
+					<Table serviceName="Tax Invoice" />
 				)
 			}
 		</section>
 	)
 }
+

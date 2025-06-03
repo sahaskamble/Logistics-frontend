@@ -90,11 +90,11 @@ export default function RequestList() {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Accepted':
-        return 'bg-green-100 text-green-800 border border-green-700';
+        return 'bg-green-100 text-green-800';
       case 'Pending':
-        return 'bg-yellow-100 text-yellow-800 border border-yellow-600';
+        return 'bg-yellow-100 text-yellow-800';
       case 'Rejected':
-        return 'bg-red-100 text-red-800 border border-red-700';
+        return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }

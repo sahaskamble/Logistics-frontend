@@ -80,7 +80,7 @@ export function DataTable({
 	}
 
 	return (
-		<div className="w-full bg-[var(--accent)]">
+		<div className="w-full">
 			<div className="flex flex-row-reverse items-center gap-4 py-4">
 				{(selectedColumn && displayFilters) && (
 					<>
