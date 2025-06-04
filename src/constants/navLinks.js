@@ -1,4 +1,4 @@
-import { ArrowDown, Bell, Boxes, Container, CreditCard, FastForward, FileSearch2, FileText, LayoutDashboard, LayoutGrid, MailQuestion, MapPinned, Package, Receipt, ReceiptIndianRupee, ReceiptText, Scale, Scan, Truck, UploadIcon, User } from "lucide-react";
+import { ArrowDown, Bell, Boxes, Container, CreditCard, FastForward, FileSearch2, FileText, LayoutDashboard, LayoutGrid, MailQuestion, MapPinned, Package, Receipt, ReceiptIndianRupee, ReceiptText, Scale, Scan, Truck, UploadIcon, User, Shield, Users, Database, Settings, Activity } from "lucide-react";
 
 export const navLinks = [
 	{
@@ -92,6 +92,43 @@ export const navLinks = [
 			{ label: "Service Requests", href: "/gol/cfs/requests", icon: MailQuestion, access: 'GOL', },
 			{ label: "Pricing Requests", href: "/gol/cfs/pricing-requests", icon: ReceiptIndianRupee, access: 'GOL', },
 			{ label: "Tariff Upload", href: "/gol/cfs/tariff-upload", access: 'GOL', icon: UploadIcon },
+		]
+	},
+
+	// ROOT/ADMIN
+	{
+		label: "Dashboard",
+		href: "/admin/dashboard",
+		icon: LayoutDashboard,
+		access: 'ROOT',
+	},
+	{
+		label: "User Management",
+		href: "/admin/users",
+		icon: Users,
+		access: 'ROOT',
+	},
+	{
+		label: "System",
+		href: '',
+		icon: Settings,
+		access: 'ROOT',
+		subItems: [
+			{ label: "Database Admin", href: "/admin/database", icon: Database, access: 'ROOT' },
+			{ label: "System Settings", href: "/admin/settings", icon: Settings, access: 'ROOT' },
+			{ label: "Activity Logs", href: "/admin/logs", icon: Activity, access: 'ROOT' },
+			{ label: "Security", href: "/admin/security", icon: Shield, access: 'ROOT' },
+		]
+	},
+	{
+		label: "Access All Areas",
+		href: '',
+		icon: Shield,
+		access: 'ROOT',
+		subItems: [
+			{ label: "Customer Portal", href: "/customer/dashboard", icon: User, access: 'ROOT' },
+			{ label: "Client Portal", href: "/client/dashboard", icon: Truck, access: 'ROOT' },
+			{ label: "GOL Portal", href: "/gol/dashboard", icon: LayoutGrid, access: 'ROOT' },
 		]
 	},
 ]

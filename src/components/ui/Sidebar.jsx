@@ -20,6 +20,7 @@ import Link from "next/link";
 import { Popover } from "./Popover";
 import { useAuth } from "@/contexts/AuthContext";
 import NotificationSheet from "./NotificationSheet";
+import { ROLES, getSidebarAccess } from "@/constants/roles";
 
 export default function Sidebar({
   children,
@@ -35,7 +36,10 @@ export default function Sidebar({
   const { open: isOpen, setOpen: setIsOpen, title } = useSidebar();
   const currentPath = usePathname();
   const router = useRouter();
-  const { Logout } = useAuth();
+  const { Logout, user } = useAuth();
+
+  // Determine the actual sidebar access based on user role
+  const actualSidebarAccess = user?.role === ROLES.ROOT ? access : getSidebarAccess(user?.role) || access;
 
   const menuItems = [
     {
@@ -300,7 +304,7 @@ flex flex-col
             <h1 className="ml-4 text-lg md:text-xl font-semibold">{title}</h1>
           </div>
           <div className="flex items-center gap-3">
-            <NotificationSheet userType={access} />
+            <NotificationSheet userType={actualSidebarAccess} />
             <Popover
               trigger={
                 <User className="w-7 h-7 md:w-8 md:h-8 bg-[var(--primary)] text-[var(--background)] p-1.5 rounded-full" />

@@ -21,12 +21,12 @@ export default function LoginPage() {
 	const handleLogin = async (e) => {
 		e.preventDefault();
 		try {
-			const res = await Login(emailOrusername, password, ROLES.CUSTOMER);
+			const res = await Login(emailOrusername, password, ROLES.MERCHANT);
 			if (res) {
 				localStorage.setItem('rememberMe', JSON.stringify(rememberMe));
 				localStorage.setItem('record', JSON.stringify(res));
-				localStorage.setItem('role', ROLES.CUSTOMER);
-				router.push('/customer/dashboard')
+				localStorage.setItem('role', ROLES.MERCHANT);
+				router.push('/client/dashboard')
 			} else {
 				alert('Login Unsuccessful');
 			}

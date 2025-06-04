@@ -102,6 +102,43 @@ const notificationData = {
       read: true,
     },
   ],
+  ROOT: [
+    {
+      id: 1,
+      title: "System backup completed successfully",
+      type: "success",
+      timestamp: "15 minutes ago",
+      read: false,
+    },
+    {
+      id: 2,
+      title: "New user registration: merchant@example.com",
+      type: "info",
+      timestamp: "1 hour ago",
+      read: false,
+    },
+    {
+      id: 3,
+      title: "Database maintenance required",
+      type: "warning",
+      timestamp: "3 hours ago",
+      read: false,
+    },
+    {
+      id: 4,
+      title: "Security alert: Multiple failed login attempts",
+      type: "error",
+      timestamp: "6 hours ago",
+      read: true,
+    },
+    {
+      id: 5,
+      title: "System performance report available",
+      type: "info",
+      timestamp: "1 day ago",
+      read: true,
+    },
+  ],
 };
 
 // Get icon based on notification type
