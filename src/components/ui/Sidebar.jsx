@@ -1,7 +1,6 @@
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { CompanyName } from "@/constants/CompanyName";
 import {
-  Bell,
   LogOutIcon,
   PanelLeft,
   User,
@@ -20,6 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Popover } from "./Popover";
 import { useAuth } from "@/contexts/AuthContext";
+import NotificationSheet from "./NotificationSheet";
 
 export default function Sidebar({
   children,
@@ -300,10 +300,7 @@ flex flex-col
             <h1 className="ml-4 text-lg md:text-xl font-semibold">{title}</h1>
           </div>
           <div className="flex items-center gap-3">
-            <button className="relative" aria-label="Notifications">
-              <Bell className="w-5 h-5 md:w-6 md:h-6" />
-              <div className="absolute -top-1 right-0 p-[5px] bg-red-500 rounded-full"></div>
-            </button>
+            <NotificationSheet userType={access} />
             <Popover
               trigger={
                 <User className="w-7 h-7 md:w-8 md:h-8 bg-[var(--primary)] text-[var(--background)] p-1.5 rounded-full" />

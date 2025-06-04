@@ -1,15 +1,15 @@
-'use client'
+"use client";
 
-import { SidebarProvider } from "@/contexts/SidebarProvider"
-import Sidebar from "@/components/ui/Sidebar"
+import { SidebarProvider } from "@/contexts/SidebarProvider";
+import Sidebar from "@/components/ui/Sidebar";
+import ProtectedRoutes from "@/contexts/ProtectedRoutes";
 
 export default function RootCustomerLayout({ children }) {
-	return (
-		<SidebarProvider>
-			<Sidebar>
-				{children}
-			</Sidebar>
-		</SidebarProvider>
-	)
+  return (
+    <ProtectedRoutes allowedRoles={["Customer"]}>
+      <SidebarProvider>
+        <Sidebar>{children}</Sidebar>
+      </SidebarProvider>
+    </ProtectedRoutes>
+  );
 }
-
