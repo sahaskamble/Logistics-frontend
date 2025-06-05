@@ -9,6 +9,7 @@ import OrderDetails from "./components/OrderDetails";
 export default function TrackTrace() {
 	const { setTitle } = useSidebar();
 	const [order, setOrder] = useState({});
+	const [movements, setMovements] = useState([]);
 
 	useEffect(() => {
 		setTitle('Track & Trace');
@@ -20,11 +21,11 @@ export default function TrackTrace() {
 
 	return (
 		<section className="grid gap-8 w-full">
-			<Form setOrder={setOrder} />
+			<Form setOrder={setOrder} setMovements={setMovements} />
 			{order?.id && (
 				<>
-					<OrderDetails order={order} />
-					<Timeline movement={order.containerMovement} />
+					<OrderDetails order={order} movement={movements} />
+					<Timeline movement={movements} />
 				</>
 			)}
 		</section>

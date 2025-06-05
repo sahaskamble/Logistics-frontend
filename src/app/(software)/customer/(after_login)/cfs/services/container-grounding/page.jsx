@@ -2,23 +2,23 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "./components/Table";
 import { useIsMobile } from "@/hooks/use-mobile";
-import MobileTable from "./components/MobileTable";
+import MobileTable from "@/app/(software)/customer/components/MobileTable";
+import Table from "@/app/(software)/customer/components/Table";
 
 export default function ContainerGroundingPage() {
 	const { setTitle } = useSidebar();
 	useEffect(() => {
-		setTitle('Container Groundings')
+		setTitle('Container Grounding')
 	}, []);
 
 	return (
 		<section className="grid gap-8">
 			{
 				useIsMobile() ? (
-					<MobileTable />
+					<MobileTable serviceName="Container Grounding" />
 				) : (
-					<Table />
+					<Table serviceName="Container Grounding" />
 				)
 			}
 		</section>

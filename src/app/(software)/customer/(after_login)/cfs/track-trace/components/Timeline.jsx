@@ -1,33 +1,7 @@
 import { useState } from 'react';
-import { FileText, FileCode, Layers, DownloadIcon, Truck, Check } from 'lucide-react';
+import { DownloadIcon, Truck, Check } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Label from '@/components/ui/Label';
-
-// Timeline data structure
-const timelineItems = [
-	{
-		id: 1,
-		title: "Flowbite Application UI v2.0.0",
-		date: "January 13th, 2022",
-		description: "Get access to over 20+ pages including a dashboard layout, charts, kanban board, calendar, and pre-order E-commerce & Marketing pages.",
-		action: "Download ZIP",
-		icon: <FileText />,
-	},
-	{
-		id: 2,
-		title: "Flowbite Figma v1.3.0",
-		date: "December 7th, 2021",
-		description: "All of the pages and components are first designed in Figma and we keep a parity between the two versions even as we update the project.",
-		icon: <Layers />,
-	},
-	{
-		id: 3,
-		title: "Flowbite Library v1.2.2",
-		date: "December 2nd, 2021",
-		description: "Get started with dozens of web components and interactive elements built on top of Tailwind CSS.",
-		icon: <FileCode />,
-	},
-];
 
 export default function Timeline({ movement }) {
 	const [activeItem, setActiveItem] = useState(null);
@@ -63,10 +37,16 @@ export default function Timeline({ movement }) {
 							{/* Content */}
 							<div className="flex-grow pt-1">
 								<div className="flex items-center gap-3 mb-1">
-									<h3 className="text-lg font-bold ">{item.status}</h3>
+									<h3 className="text-lg font-bold ">{item?.status}</h3>
 								</div>
-								<p className="text-sm font-medium text-[var(--foreground)] mb-2">Released on {item.date}</p>
-								<p className="text-sm text-[var(--foreground)] mb-3">{item.remarks}</p>
+								<p className="text-sm font-medium text-[var(--foreground)] mb-2">Released on {
+									new Date(item.date).toLocaleDateString('en-US', {
+										day: 'numeric',
+										month: 'short',
+										year: 'numeric',
+									})
+								}</p>
+								<p className="text-sm text-[var(--foreground)] mb-3">{item?.remarks}</p>
 								<Button
 									title='Download Zip'
 									icon={

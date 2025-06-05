@@ -72,7 +72,7 @@ export default function HeaderLayout({ currentService, setCurrentService }) {
 								iconPosition="top"
 								className="max-w-xl text-sm"
 								variant={currentService === item.id ? 'link' : 'none'}
-								onClick={() => setCurrentService(item.id)}
+								onClick={() => setCurrentService(item.label)}
 							/>
 						))}
 					</div>

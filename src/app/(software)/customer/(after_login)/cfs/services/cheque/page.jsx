@@ -2,11 +2,11 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "./components/Table";
 import { useIsMobile } from "@/hooks/use-mobile";
-import MobileTable from "./components/MobileTable";
+import MobileTable from "@/app/(software)/customer/components/MobileTable";
+import Table from "@/app/(software)/customer/components/Table";
 
-export default function ChequePayment() {
+export default function ChequeAcceptancePage() {
 	const { setTitle } = useSidebar();
 	useEffect(() => {
 		setTitle('Cheque Acceptance')
@@ -16,9 +16,9 @@ export default function ChequePayment() {
 		<section className="grid gap-8">
 			{
 				useIsMobile() ? (
-					<MobileTable />
+					<MobileTable serviceName="Cheque Acceptance" />
 				) : (
-					<Table />
+					<Table serviceName="Cheque Acceptance" />
 				)
 			}
 		</section>
