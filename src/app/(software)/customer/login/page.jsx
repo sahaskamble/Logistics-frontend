@@ -5,32 +5,30 @@ import Label from "@/components/ui/Label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowRightToLine } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
-import { Button } from "@/components/ui/button";
 import Input from "@/components/ui/Input";
 import { useAuth } from "@/contexts/AuthContext";
-import { usePathname, useRouter } from "next/navigation";
-import { RoleCheckByPathName } from "@/components/utils/RoleChecker";
+import { useRouter } from "next/navigation";
+import { ROLES } from "@/constants/roles";
+import Button from "@/components/ui/Button";
 
 export default function LoginPage() {
 	const [emailOrusername, setEmailOrUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [rememberMe, setRememberMe] = useState(false);
 	const { user, Login } = useAuth();
-	const pathName = usePathname();
 	const router = useRouter();
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
 		try {
-			const role = RoleCheckByPathName(pathName);
-			const res = await Login(emailOrusername, password, role);
+			const res = await Login(emailOrusername, password, ROLES.CUSTOMER);
 			if (res) {
 				localStorage.setItem('rememberMe', JSON.stringify(rememberMe));
 				localStorage.setItem('record', JSON.stringify(res));
-				localStorage.setItem('role', role);
+				localStorage.setItem('role', ROLES.CUSTOMER);
 				router.push('/customer/dashboard')
 			} else {
-				alert('Login Unsuccessfull');
+				alert('Login Unsuccessful');
 			}
 		} catch (err) {
 			alert(err);
@@ -50,7 +48,7 @@ export default function LoginPage() {
 			style={{ backgroundImage: 'url("/cargo-ship.png")' }}
 		>
 			<div className="absolute -z-[1] top-0 left-0 w-full min-h-screen bg-black/60"></div>
-			<div className="bg-white/40 backdrop-blur-md shadow-xl rounded-2xl p-8 w-full max-w-md">
+			<div className="bg-white/50 backdrop-blur-md shadow-xl rounded-2xl p-8 w-full max-w-md">
 				<div className="text-center mb-6">
 					<div className="text-sm font-bold text-green-700">Logo</div>
 					<h2 className="text-2xl font-semibold text-green-800 mt-2">Welcome to Green Ocean</h2>
@@ -93,7 +91,12 @@ export default function LoginPage() {
 						<a href="" className="text-red-500 hover:underline">Forget Password?</a>
 					</div>
 
-					<Button type='submit' className='w-full bg-green-700 hover:bg-green-800 text-white'><ArrowRightToLine />Login</Button>
+					<Button
+						type='submit'
+						className='w-full bg-green-700 hover:bg-green-800 text-white'
+						title={'Login'}
+						icon={<ArrowRightToLine />}
+					/>
 				</form>
 
 				<div className="flex items-center my-4">
@@ -106,10 +109,9 @@ export default function LoginPage() {
 					variant='outline'
 					className='w-full flex items-center justify-center gap-2'
 					type='button'
-				>
-					<FcGoogle />
-					Login with Google
-				</Button>
+					icon={<FcGoogle />}
+					title={'Login with Google'}
+				/>
 
 				<p className="text-center text-sm mt-4">
 					Don't have an account?{""}
@@ -124,4 +126,3 @@ export default function LoginPage() {
 		</div>
 	)
 }
-

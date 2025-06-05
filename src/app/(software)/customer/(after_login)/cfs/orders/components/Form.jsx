@@ -81,6 +81,7 @@ export default function Form() {
       data.append('fromDate', formData.fromDate);
       data.append('toDate', formData.toDate);
       data.append('orderDescription', formData.orderDescription);
+      data.append('customer', user.id);
       data.append('createdBy', user.id);
       data.append('status', formData.status);
       // Append container IDs as JSON

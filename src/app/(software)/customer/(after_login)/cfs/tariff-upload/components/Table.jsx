@@ -5,11 +5,15 @@ import { useCollection } from '@/hooks/useCollection';
 import EditForm from './EditForm';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function RequestTable() {
   const { data, deleteItem } = useCollection('cfs_tariffs_request', {
     expand: 'order,jobOrder,container,type'
   });
+  const { user } = useAuth();
+  const [filteredData, setFilteredData] = useState([]);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -135,6 +139,12 @@ export default function RequestTable() {
     }
   ];
 
+  useEffect(() => {
+    if (data?.length > 0 && user?.id) {
+      const filtered_data = data.filter((item) => item?.expand?.order?.customer === user?.id);
+      setFilteredData(filtered_data);
+    }
+  }, [data]);
 
   return (
     <div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
@@ -147,7 +157,7 @@ export default function RequestTable() {
             </div>
             <MobileDataTable
               columns={columns}
-              data={data}
+              data={filteredData}
             />
           </>
         ) : (
@@ -158,7 +168,7 @@ export default function RequestTable() {
             </div>
             <DataTable
               columns={columns}
-              data={data}
+              data={filteredData}
             />
           </>
         )

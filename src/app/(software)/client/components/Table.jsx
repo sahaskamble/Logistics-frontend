@@ -6,12 +6,13 @@ import { useCollection } from '@/hooks/useCollection';
 import EditForm from './EditForm';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Table = ({ serviceName = '' }) => {
   const { data, deleteItem } = useCollection('cfs_service_details', {
-    expand: 'order,jobOrder,container,type'
+    expand: 'order,order.cfs,jobOrder,container,type'
   });
-
+  const { user } = useAuth();
   const [filteredData, setFilteredData] = useState([]);
 
   const getStatusClass = (status) => {
@@ -146,7 +147,7 @@ const Table = ({ serviceName = '' }) => {
 
   useEffect(() => {
     if (data?.length > 0) {
-      setFilteredData(data.filter((item) => item?.expand?.type?.title === serviceName))
+      setFilteredData(data.filter((item) => item?.expand?.type?.title === serviceName && item?.expand?.order?.expand?.cfs?.author === user?.id))
     }
   }, [data]);
 

@@ -6,11 +6,15 @@ import Form from './Form';
 import EditForm from './EditForm';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function OrdersList() {
   const { data, deleteItem } = useCollection('cfs_orders', {
     expand: 'containers,cfs'
   });
+  const { user } = useAuth();
+  const [filteredData, setFilteredData] = useState([]);
 
   const columns = [
     {
@@ -171,6 +175,14 @@ export default function OrdersList() {
     }
   };
 
+  useEffect(() => {
+    if (data?.length > 0 && user?.id) {
+      const filtered_data = data.filter((item) => item?.customer === user?.id);
+      setFilteredData(filtered_data);
+    }
+  }, [data]);
+
+
   return (
     <div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
       {
@@ -182,7 +194,7 @@ export default function OrdersList() {
             </div>
             <MobileDataTable
               columns={columns}
-              data={data}
+              data={filteredData}
             />
           </>
         ) : (
@@ -193,7 +205,7 @@ export default function OrdersList() {
             </div>
             <DataTable
               columns={columns}
-              data={data}
+              data={filteredData}
             />
           </>
         )

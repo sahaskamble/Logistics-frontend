@@ -45,10 +45,20 @@ export function AuthContextProvider({ children }) {
 		}
 	}
 
+	async function Logout() {
+		try {
+			await pbclient.authStore.clear();
+			localStorage.removeItem('pocketbase_auth');
+		} catch (err) {
+			console.error(err);
+		}
+	}
+
 	const value = {
 		user,
 		loading,
 		Login,
+		Logout,
 		Register
 	};
 

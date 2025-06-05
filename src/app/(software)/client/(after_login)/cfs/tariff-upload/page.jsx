@@ -4,10 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
 import RequestTable from "./components/Table";
-import MobileRequestList from "./components/MobileTable";
-import MobileTable from "@/app/(software)/client/components/MobileTable";
 import Table from "@/app/(software)/client/components/Table";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function TariffUpload() {
 	const { setTitle } = useSidebar();
@@ -25,23 +22,11 @@ export default function TariffUpload() {
 				</TabsList>
 
 				<TabsContent value="requests" className="md:p-4 w-full h-screen">
-					{
-						useIsMobile() ? (
-							<MobileRequestList />
-						) : (
-							<RequestTable />
-						)
-					}
+					<RequestTable />
 				</TabsContent>
 
 				<TabsContent value="uploads" className="md:p-4 w-full h-screen">
-					{
-						useIsMobile() ? (
-							<MobileTable serviceName="Tariff Uploads" />
-						) : (
-							<Table serviceName="Tariff Uploads" />
-						)
-					}
+					<Table serviceName="Tariff Uploads" />
 				</TabsContent>
 			</Tabs>
 		</section>

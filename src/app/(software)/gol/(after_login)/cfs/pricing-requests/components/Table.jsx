@@ -11,6 +11,7 @@ export default function RequestTable() {
   const { data, deleteItem, updateItem, mutation } = useCollection('cfs_pricing_request', {
     expand: 'user,serviceProvider'
   });
+  console.log(data);
   const { user } = useAuth();
 
   const handleStatusUpdate = async (id, status = 'Pending') => {

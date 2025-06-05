@@ -1,33 +1,18 @@
 import { DataTable } from '@/components/ui/Table';
-import { Eye, Trash, CircleCheckBig, CircleX } from 'lucide-react';
+import { Eye, Trash, } from 'lucide-react';
 import { useCollection } from '@/hooks/useCollection';
 import EditForm from './EditForm';
 import { useAuth } from '@/contexts/AuthContext';
-import { toast } from 'sonner';
 import MobileDataTable from '@/components/ui/MobileDataTable';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useEffect, useState } from 'react';
 
 export default function RequestTable() {
-  const { data, deleteItem, updateItem, mutation } = useCollection('cfs_pricing_request', {
+  const { data, deleteItem, } = useCollection('cfs_pricing_request', {
     expand: 'user,serviceProvider'
   });
+  const [filteredData, setFilteredData] = useState([]);
   const { user } = useAuth();
-
-  const handleStatusUpdate = async (id, status = 'Pending') => {
-    try {
-      await updateItem(id, {
-        status: status,
-        golVerified: true,
-        golVerifiedBy: user?.id
-      });
-      toast.success('Updated');
-    } catch (error) {
-      console.log(error)
-      toast.error(error.message);
-    } finally {
-      mutation()
-    }
-  }
 
   const columns = [
     {
@@ -121,6 +106,13 @@ export default function RequestTable() {
     }
   };
 
+  useEffect(() => {
+    if (data?.length > 0 && user?.id) {
+      const filtered_data = data.filter((item) => item?.user === user?.id);
+      setFilteredData(filtered_data);
+    }
+  }, [data]);
+
   return (
     <div>
       <div className="border-2 md:bg-accent md:p-4 rounded-xl md:mt-8">
@@ -136,7 +128,7 @@ export default function RequestTable() {
           ) : (
             <DataTable
               columns={columns}
-              data={data}
+              data={filteredData}
             />
           )
         }

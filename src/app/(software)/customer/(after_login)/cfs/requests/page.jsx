@@ -11,15 +11,17 @@ import NewRequests from "../../components/NewRequests";
 import { useCollection } from "@/hooks/useCollection";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileDataTable from "@/components/ui/MobileDataTable";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function RequestsPage() {
-	const { data: requestsList, deleteItem } = useCollection('cfs_service_requests', {
+	const { data, deleteItem } = useCollection('cfs_service_requests', {
 		expand: 'user,order,serviceType'
 	});
 
 	const { setTitle } = useSidebar();
-
+	const { user } = useAuth();
 	const [requests, setRequests] = useState([]);
+	const [requestsList, setRequestsList] = useState([])
 	const [Stats, setStats] = useState({
 		pending: 0,
 		approved: 0,
@@ -34,10 +36,12 @@ export default function RequestsPage() {
 
 	// For Stats
 	useEffect(() => {
-		if (requestsList?.length > 0) {
-			setRequests(requestsList);
+		if (data?.length > 0 && user?.id) {
+			const filtered_data = data.filter((item) => item?.user === user?.id);
+			setRequestsList(filtered_data);
+			setRequests(filtered_data);
 			let pending = 0, approved = 0, rejected = 0;
-			requestsList.forEach((request) => {
+			filtered_data.forEach((request) => {
 				switch (request.status) {
 					case 'Accepted':
 						approved += 1;
@@ -52,7 +56,7 @@ export default function RequestsPage() {
 			});
 			setStats({ pending, approved, rejected });
 		}
-	}, [requests, requestsList]);
+	}, [user, data]);
 
 	const RequestColumns = [
 		{

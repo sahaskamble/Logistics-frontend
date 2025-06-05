@@ -100,9 +100,9 @@ export default function Table() {
 	];
 
 	useEffect(() => {
-		if (data?.length > 0 || user?.id) {
-			// const filtered_data = data.filter((item) => item.ownedBy === user?.id);
-			setFilteredData(data);
+		if (data?.length > 0 && user?.id) {
+			const filtered_data = data.filter((item) => item?.ownedBy === user?.id);
+			setFilteredData(filtered_data);
 		}
 	}, [data]);
 

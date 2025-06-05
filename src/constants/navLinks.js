@@ -51,7 +51,7 @@ export const navLinks = [
 		subItems: [
 			{ label: "Orders", href: "/client/cfs/orders", access: 'Client', icon: Package },
 			{ label: "Order Movement", href: "/client/cfs/order-movement", access: 'Client', icon: MapPinned },
-			{ label: "Requests", href: "/client/cfs/requests", icon: MailQuestion, access: 'Client', },
+			{ label: "Service Requests", href: "/client/cfs/requests", icon: MailQuestion, access: 'Client', },
 			{ label: "Services", href: "/client/cfs/services", access: 'Client', icon: FileSearch2 },
 			{ label: "Tariff Upload", href: "/client/cfs/tariff-upload", access: 'Client', icon: UploadIcon },
 			{ label: "EIR / COP", href: '/client/cfs/services/eir-cop', access: 'Client', icon: FileText, },

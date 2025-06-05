@@ -201,30 +201,18 @@ export default function RequestList() {
 
   return (
     <div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
+      <h1 className="text-xl font-semibold md:p-0 p-4">Customer Orders</h1>
       {
         useIsMobile() ? (
-          <>
-            <h1 className="text-xl font-semibold p-4">Customer Orders</h1>
-            <div className="flex justify-end p-4">
-              <Form />
-            </div>
-            <MobileDataTable
-              columns={columns}
-              data={data?.length > 0 ? data : []}
-            />
-          </>
+          <MobileDataTable
+            columns={columns}
+            data={data?.length > 0 ? data : []}
+          />
         ) : (
-          <>
-            <div className="flex items-center justify-between gap-4">
-              <h1 className="text-lg font-semibold">Customer Orders</h1>
-              <Form />
-            </div>
-
-            <DataTable
-              columns={columns}
-              data={data}
-            />
-          </>
+          <DataTable
+            columns={columns}
+            data={data}
+          />
         )
       }
     </div>

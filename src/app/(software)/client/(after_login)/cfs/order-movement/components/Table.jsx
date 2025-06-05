@@ -5,11 +5,15 @@ import Form from './Form';
 import EditForm from './EditForm';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEffect, useState } from 'react';
 
 export default function Table() {
 	const { data, deleteItem } = useCollection('cfs_order_movement', {
-		expand: 'order',
+		expand: 'order,order.cfs',
 	});
+	const { user } = useAuth();
+	const [filteredData, setFilteredData] = useState([]);
 
 	const columns = [
 		{
@@ -101,6 +105,13 @@ export default function Table() {
 		}
 	];
 
+	useEffect(() => {
+		if (data?.length > 0 && user?.id) {
+			console.log(data);
+			const filtered_data = data.filter((item) => item?.expand?.order?.expand?.cfs?.author === user?.id);
+			setFilteredData(filtered_data);
+		}
+	}, [data]);
 
 	return (
 		<div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
@@ -113,7 +124,7 @@ export default function Table() {
 						</div>
 						<MobileDataTable
 							columns={columns}
-							data={data}
+							data={filteredData}
 						/>
 					</>
 				) : (
@@ -125,7 +136,7 @@ export default function Table() {
 
 						<DataTable
 							columns={columns}
-							data={data}
+							data={filteredData}
 						/>
 					</>
 				)

@@ -1,20 +1,33 @@
-import { useSidebar } from '@/contexts/SidebarProvider';
-import { CompanyName } from '@/constants/CompanyName';
-import { Bell, LogOutIcon, PanelLeft, User, ChevronDown, ChevronRight, MessageSquare, CircleUserRound, Sailboat, LayoutDashboard, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import Button from './Button';
-import { navLinks } from '@/constants/navLinks';
-import { usePathname, useRouter } from 'next/navigation'
-import Link from 'next/link';
-import { Popover } from './Popover';
+import { useSidebar } from "@/contexts/SidebarProvider";
+import { CompanyName } from "@/constants/CompanyName";
+import {
+	LogOutIcon,
+	PanelLeft,
+	User,
+	ChevronDown,
+	ChevronRight,
+	MessageSquare,
+	CircleUserRound,
+	Sailboat,
+	LayoutDashboard,
+	X,
+} from "lucide-react";
+import { useState, useEffect } from "react";
+import Button from "./Button";
+import { navLinks } from "@/constants/navLinks";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { Popover } from "./Popover";
+import { useAuth } from "@/contexts/AuthContext";
+import NotificationSheet from "./NotificationSheet";
 
 export default function Sidebar({
 	children,
 	defaultOpen = true,
 	sidebarClassWidth = "w-[300px]", // Use tailwind class instead of fixed px
 	sidebarColor = "bg-[var(--primary)]",
-	access = 'Customer',
-	sidebarItems = navLinks.filter((link) => link.access === access)
+	access = "Customer",
+	sidebarItems = navLinks.filter((link) => link.access === access),
 }) {
 	const [isMobile, setIsMobile] = useState(false);
 	const [isTablet, setIsTablet] = useState(false);
@@ -22,21 +35,38 @@ export default function Sidebar({
 	const { open: isOpen, setOpen: setIsOpen, title } = useSidebar();
 	const currentPath = usePathname();
 	const router = useRouter();
+	const { Logout } = useAuth();
 
 	const menuItems = [
-		{ icon: <MessageSquare className='text-[var(--foreground)]' />, text: "Messages" },
-		{ icon: <CircleUserRound className='text-[var(--foreground)]' />, text: "Profile" },
-		{ icon: <LayoutDashboard className='text-[var(--foreground)]' />, text: "Dashboard" },
+		{
+			icon: <MessageSquare className="text-[var(--foreground)]" />,
+			text: "Messages",
+			url: '/customer/messages',
+		},
+		{
+			icon: <CircleUserRound className="text-[var(--foreground)]" />,
+			text: "Profile",
+			url: '/customer/profile',
+		},
+		{
+			icon: <LayoutDashboard className="text-[var(--foreground)]" />,
+			text: "Dashboard",
+			url: '/customer/dashboard',
+		},
 	];
 
 	const hostItems = [
 		{
 			title: "Merchant Login",
 			description: "Get started with Merchant Side.",
-			icon: <Sailboat className='text-[var(--foreground)]' />
+			icon: <Sailboat className="text-[var(--foreground)]" />,
 		},
 		{ title: "Refer Co-Workers", icon: null },
-		{ title: "Log out", icon: <LogOutIcon className='w-5 h-5 text-[var(--foreground)]' /> }
+		{
+			title: "Log out",
+			icon: <LogOutIcon className="w-5 h-5 text-[var(--foreground)]" />,
+			logout: Logout,
+		},
 	];
 
 	// Check screen size and adjust layout accordingly
@@ -63,20 +93,20 @@ export default function Sidebar({
 
 		// Check for Ctrl+B
 		const handleKeyDown = (e) => {
-			if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+			if ((e.ctrlKey || e.metaKey) && e.key === "b") {
 				e.preventDefault(); // Prevent browser default (like bold in inputs)
 				toggleSidebar();
 			}
 		};
-		window.addEventListener('keydown', handleKeyDown);
+		window.addEventListener("keydown", handleKeyDown);
 
 		// Add event listener for window resize
-		window.addEventListener('resize', checkScreenSize);
+		window.addEventListener("resize", checkScreenSize);
 
 		// Clean up
 		return () => {
-			window.removeEventListener('resize', checkScreenSize)
-			window.removeEventListener('keydown', handleKeyDown);
+			window.removeEventListener("resize", checkScreenSize);
+			window.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [defaultOpen, setIsOpen]);
 
@@ -92,9 +122,9 @@ export default function Sidebar({
 
 	// Toggle the expanded state of a menu item
 	const toggleItemExpand = (index) => {
-		setExpandedItems(prev => ({
+		setExpandedItems((prev) => ({
 			...prev,
-			[index]: !prev[index]
+			[index]: !prev[index],
 		}));
 	};
 
@@ -104,6 +134,11 @@ export default function Sidebar({
 		if (isTablet) return "w-72"; // Fixed width on tablet
 		return sidebarClassWidth; // Default width on desktop
 	};
+
+	const handleLogout = () => {
+		Logout();
+		window.location.reload();
+	}
 
 	return (
 		<div className="fixed inset-0  flex min-h-screen overflow-hidden">
@@ -121,7 +156,12 @@ export default function Sidebar({
 				className={`
 fixed md:sticky top-0 h-screen z-30
 ${getSidebarWidthClass()}
-${isOpen ? 'translate-x-0' : (isMobile || isTablet ? '-translate-x-full md:w-0' : '-translate-x-[400px] md:w-0')}
+${isOpen
+						? "translate-x-0"
+						: isMobile || isTablet
+							? "-translate-x-full md:w-0"
+							: "-translate-x-[400px] md:w-0"
+					}
 ${sidebarColor} text-white 
 transition-all duration-300 ease-in-out
 flex flex-col
@@ -155,8 +195,8 @@ flex flex-col
 										{hasSubItems ? (
 											<div
 												className={`flex items-center justify-between cursor-pointer p-2 rounded transition-colors duration-200 ${active
-													? 'bg-white text-[var(--foreground)] font-medium'
-													: 'hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20'
+													? "bg-white text-[var(--foreground)] font-medium"
+													: "hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20"
 													}`}
 												onClick={() => toggleItemExpand(index)}
 											>
@@ -176,10 +216,12 @@ flex flex-col
 											<Link
 												href={item.href}
 												className={`flex items-center justify-between p-2 rounded transition-colors duration-200 ${active
-													? 'bg-white text-[var(--foreground)] font-medium'
-													: 'hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20'
+													? "bg-white text-[var(--foreground)] font-medium"
+													: "hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20"
 													}`}
-												onClick={() => (isMobile || isTablet) && setIsOpen(false)}
+												onClick={() =>
+													(isMobile || isTablet) && setIsOpen(false)
+												}
 											>
 												<div className="flex items-center gap-3">
 													{item?.icon && <item.icon className="w-5 h-5" />}
@@ -198,13 +240,19 @@ flex flex-col
 															<Link
 																href={subItem.href}
 																className={`flex items-center gap-3 p-2 rounded transition-colors duration-200 ${subActive
-																	? 'bg-white text-[var(--foreground)] font-medium'
-																	: 'hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20'
+																	? "bg-white text-[var(--foreground)] font-medium"
+																	: "hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20"
 																	}`}
-																onClick={() => (isMobile || isTablet) && setIsOpen(false)}
+																onClick={() =>
+																	(isMobile || isTablet) && setIsOpen(false)
+																}
 															>
-																{subItem?.icon && <subItem.icon className="w-4 h-4" />}
-																<span className="truncate">{subItem.label}</span>
+																{subItem?.icon && (
+																	<subItem.icon className="w-4 h-4" />
+																)}
+																<span className="truncate">
+																	{subItem.label}
+																</span>
 															</Link>
 														</li>
 													);
@@ -225,14 +273,7 @@ flex flex-col
 						variant="invert"
 						className="w-full rounded-xl"
 						icon={<LogOutIcon className="w-4 h-4 ml-2" />}
-						onClick={() => access === 'Customer' ?
-							router.push('/customer/home')
-							: (
-								access === 'Client'
-									? router.push('/client/login')
-									: router.push('/gol/login')
-							)
-						}
+						onClick={() => handleLogout()}
 						iconPosition="right"
 					/>
 				</div>
@@ -254,10 +295,7 @@ flex flex-col
 						<h1 className="ml-4 text-lg md:text-xl font-semibold">{title}</h1>
 					</div>
 					<div className="flex items-center gap-3">
-						<button className="relative" aria-label="Notifications">
-							<Bell className="w-5 h-5 md:w-6 md:h-6" />
-							<div className="absolute -top-1 right-0 p-[5px] bg-red-500 rounded-full"></div>
-						</button>
+						<NotificationSheet userType={access} />
 						<Popover
 							trigger={
 								<User className="w-7 h-7 md:w-8 md:h-8 bg-[var(--primary)] text-[var(--background)] p-1.5 rounded-full" />
@@ -267,10 +305,14 @@ flex flex-col
 								{/* Regular menu items */}
 								<div className="py-4">
 									{menuItems.map((item, index) => (
-										<div key={index} className="flex items-center py-1.5 px-4 hover:bg-[var(--background)] cursor-pointer">
+										<Link
+											key={index}
+											href={item.url}
+											className="flex items-center py-1.5 px-4 hover:bg-[var(--background)] cursor-pointer"
+										>
 											<span className="w-6 text-center mr-4">{item.icon}</span>
 											<span className="text-gray-800 text-sm">{item.text}</span>
-										</div>
+										</Link>
 									))}
 								</div>
 
@@ -282,11 +324,19 @@ flex flex-col
 								{/* Host section */}
 								<div className="pt-2 pb-2">
 									{hostItems.map((item, index) => (
-										<div key={index} className="flex items-start py-3 px-4 hover:bg-gray-100 cursor-pointer">
+										<div
+											key={index}
+											onClick={() => item?.logout && handleLogout()}
+											className="flex items-start py-3 px-4 hover:bg-[var(--background)] cursor-pointer"
+										>
 											<div className="flex-1">
-												<div className="text-gray-800 text-sm">{item.title}</div>
+												<div className="text-gray-800 text-sm">
+													{item.title}
+												</div>
 												{item.description && (
-													<div className="text-gray-500 text-xs mt-1">{item.description}</div>
+													<div className="text-gray-500 text-xs mt-1">
+														{item.description}
+													</div>
 												)}
 											</div>
 											{item.icon && (
@@ -301,9 +351,7 @@ flex flex-col
 				</header>
 
 				{/* Page Content */}
-				<main className="flex-1 overflow-y-auto p-4 md:p-6">
-					{children}
-				</main>
+				<main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
 			</div>
 		</div>
 	);
