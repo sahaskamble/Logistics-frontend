@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataTable } from '@/components/ui/Table';
 import { Eye, Download, } from 'lucide-react';
 import { useCollection } from '@/hooks/useCollection';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Table = () => {
-  const { data, deleteItem } = useCollection('cfs_job_order', {
+  const { data } = useCollection('cfs_job_order', {
     expand: 'order,serviceType'
   });
+  const { user } = useAuth();
+  const [filteredData, setFilteredData] = useState([]);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -120,14 +125,30 @@ const Table = () => {
     }
   ];
 
-  return (
-    <div className="border-2 bg-accent p-4 rounded-xl mt-8">
-      <h1 className="text-lg font-semibold">Job Orders</h1>
+  useEffect(() => {
+    if (data?.length > 0 && user?.id) {
+      const filtered_data = data.filter((item) => item?.expand?.order?.customer === user?.id);
+      setFilteredData(filtered_data);
+    }
+  }, [data]);
 
-      <DataTable
-        columns={columns}
-        data={data}
-      />
+
+  return (
+    <div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
+      <h1 className="text-xl font-semibold md:p-0 p-4">Job Orders</h1>
+      {
+        useIsMobile() ? (
+          <MobileDataTable
+            columns={columns}
+            data={filteredData}
+          />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={filteredData}
+          />
+        )
+      }
     </div>
   );
 };

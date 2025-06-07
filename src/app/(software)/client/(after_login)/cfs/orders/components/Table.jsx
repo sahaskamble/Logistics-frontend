@@ -3,14 +3,18 @@ import { DataTable } from '@/components/ui/Table';
 import { useCollection } from '@/hooks/useCollection';
 import Badge from '@/components/ui/Badge';
 import { useAuth } from '@/contexts/AuthContext';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
-export default function RequestList() {
+export default function OrdersList() {
   const { data, updateItem, mutation } = useCollection('cfs_orders', {
     expand: 'containers,cfs',
     filter: `golVerified=true`
   });
   const { user } = useAuth();
-  console.log(data);
+  const [filteredData, setFilteredData] = useState([]);
 
   const handleStatusUpdate = async (id, status = 'Pending') => {
     try {
@@ -149,14 +153,22 @@ export default function RequestList() {
       filterable: false,
       cell: ({ row }) => (
         <div className='flex gap-2 items-center justify-center'>
-          <Eye
-            size={18}
-            className="cursor-pointer text-primary"
-          />
-          <Download
-            size={18}
-            className="cursor-pointer text-primary"
-          />
+          <Link
+            href={`/client/cfs/orders/view/${row.original.id}`}
+          >
+            <Eye
+              size={18}
+              className="cursor-pointer text-primary"
+            />
+          </Link>
+          <Link
+            href={'/'}
+          >
+            <Download
+              size={18}
+              className="cursor-pointer text-primary"
+            />
+          </Link>
           <CircleCheckBig
             size={18}
             className="cursor-pointer text-primary"
@@ -185,10 +197,29 @@ export default function RequestList() {
     }
   };
 
+  useEffect(() => {
+    if (data?.length > 0 && user?.id) {
+      const filtered_data = data.filter((item) => item?.expand?.cfs?.author === user?.id);
+      setFilteredData(filtered_data);
+    }
+  }, [data]);
+
   return (
-    <div className="border rounded-lg bg-accent p-6 mb-4">
-      <h1 className='font-semibold text-2xl'>Customer Orders</h1>
-      <DataTable columns={columns} data={data} />
+    <div className="border-2 md:bg-accent md:p-4 rounded-xl md:mt-8">
+      <h1 className="text-xl font-semibold md:p-0 p-4">Customer Orders</h1>
+      {
+        useIsMobile() ? (
+          <MobileDataTable
+            columns={columns}
+            data={filteredData}
+          />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={filteredData}
+          />
+        )
+      }
     </div>
   )
 };

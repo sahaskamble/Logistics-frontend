@@ -1,4 +1,4 @@
-import { ArrowDown, Bell, Boxes, Container, CreditCard, FastForward, FileSearch2, FileText, LayoutDashboard, LayoutGrid, MailQuestion, MapPinned, Package, Receipt, ReceiptIndianRupee, ReceiptText, Scale, Scan, Truck, UploadIcon, User, Shield, Users, Database, Settings, Activity } from "lucide-react";
+import { ArrowDown, Bell, Boxes, Container, CreditCard, FastForward, FileSearch2, FileText, LayoutDashboard, LayoutGrid, MailQuestion, MapPinned, Package, Receipt, ReceiptIndianRupee, Scale, Scan, Truck, UploadIcon, User } from "lucide-react";
 
 export const navLinks = [
 	{
@@ -8,19 +8,14 @@ export const navLinks = [
 		access: 'Customer',
 	},
 	{
-		label: "Service Request",
-		href: "/customer/service-requests",
-		icon: ReceiptText,
-		access: 'Customer',
-	},
-	{
 		label: "CFS",
 		href: '',
 		icon: Truck,
 		access: 'Customer',
 		subItems: [
 			{ label: "Orders", href: "/customer/cfs/orders", access: 'Customer', icon: Package },
-			{ label: "Requests", href: "/customer/cfs/requests", icon: MailQuestion, access: 'Customer', },
+			{ label: "Pricing Requests", href: "/customer/cfs/pricing-requests", icon: ReceiptIndianRupee, access: 'Customer', },
+			{ label: "Service Requests", href: "/customer/cfs/requests", icon: MailQuestion, access: 'Customer', },
 			{ label: "Services", href: "/customer/cfs/services", access: 'Customer', icon: FileSearch2 },
 			{ label: "Track & Trace", href: "/customer/cfs/track-trace", access: 'Customer', icon: MapPinned },
 			{ label: "Tariff Upload", href: "/customer/cfs/tariff-upload", access: 'Customer', icon: UploadIcon },
@@ -56,7 +51,7 @@ export const navLinks = [
 		subItems: [
 			{ label: "Orders", href: "/client/cfs/orders", access: 'Client', icon: Package },
 			{ label: "Order Movement", href: "/client/cfs/order-movement", access: 'Client', icon: MapPinned },
-			{ label: "Requests", href: "/client/cfs/requests", icon: MailQuestion, access: 'Client', },
+			{ label: "Service Requests", href: "/client/cfs/requests", icon: MailQuestion, access: 'Client', },
 			{ label: "Services", href: "/client/cfs/services", access: 'Client', icon: FileSearch2 },
 			{ label: "Tariff Upload", href: "/client/cfs/tariff-upload", access: 'Client', icon: UploadIcon },
 			{ label: "EIR / COP", href: '/client/cfs/services/eir-cop', access: 'Client', icon: FileText, },
@@ -92,43 +87,6 @@ export const navLinks = [
 			{ label: "Service Requests", href: "/gol/cfs/requests", icon: MailQuestion, access: 'GOL', },
 			{ label: "Pricing Requests", href: "/gol/cfs/pricing-requests", icon: ReceiptIndianRupee, access: 'GOL', },
 			{ label: "Tariff Upload", href: "/gol/cfs/tariff-upload", access: 'GOL', icon: UploadIcon },
-		]
-	},
-
-	// ROOT/ADMIN
-	{
-		label: "Dashboard",
-		href: "/admin/dashboard",
-		icon: LayoutDashboard,
-		access: 'ROOT',
-	},
-	{
-		label: "User Management",
-		href: "/admin/users",
-		icon: Users,
-		access: 'ROOT',
-	},
-	{
-		label: "System",
-		href: '',
-		icon: Settings,
-		access: 'ROOT',
-		subItems: [
-			{ label: "Database Admin", href: "/admin/database", icon: Database, access: 'ROOT' },
-			{ label: "System Settings", href: "/admin/settings", icon: Settings, access: 'ROOT' },
-			{ label: "Activity Logs", href: "/admin/logs", icon: Activity, access: 'ROOT' },
-			{ label: "Security", href: "/admin/security", icon: Shield, access: 'ROOT' },
-		]
-	},
-	{
-		label: "Access All Areas",
-		href: '',
-		icon: Shield,
-		access: 'ROOT',
-		subItems: [
-			{ label: "Customer Portal", href: "/customer/dashboard", icon: User, access: 'ROOT' },
-			{ label: "Client Portal", href: "/client/dashboard", icon: Truck, access: 'ROOT' },
-			{ label: "GOL Portal", href: "/gol/dashboard", icon: LayoutGrid, access: 'ROOT' },
 		]
 	},
 ]

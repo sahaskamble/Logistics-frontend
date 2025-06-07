@@ -6,8 +6,8 @@ import Input from "@/components/ui/Input";
 import Label from "@/components/ui/Label";
 import { useCollection } from "@/hooks/useCollection";
 import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "sonner";
 import TextArea from "@/components/ui/TextArea";
+import { toast } from "sonner";
 
 
 export default function EditForm({ info }) {

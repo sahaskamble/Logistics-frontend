@@ -27,63 +27,31 @@ export default function ClientHomePage() {
 	const [filter, setFilter] = useState('');
 	const [SearchQuery, setSearchQuery] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
-	const [isPopup, setIsPopup] = useState(false);
-
-	const checkShouldShoPopup = ()=>{
-		const now = Date.now();
-
-		const closeClickTime = parseInt(localStorage.getItem('popupCloseAt') || '0', 10);
-		const escCloseTime = parseInt(localStorage.getItem('popupEscClosedAt') || '0', 10);
-
-		const fiveMinutes = 5 * 60 * 1000;
-		const oneMinute = 60* 1000;
-
-		const isWithCloseClickLimit = now - closeClickTime < fiveMinutes;
-		const isWithEscLimit = now - escCloseTime < oneMinute;
-
-		if (isWithCloseClickLimit || isWithEscLimit) {
-			setIsPopup(false);
-		} else {
-			setIsPopup(true);
-		}
-	};
+	const [isPopup, setIsPopup] = useState(true);
 
 	useEffect(() => {
+		// setServiceTitle(servicesList?.find((service) => service?.label === currentService).label);
+		// setFilteredServices(ServiceProviders.filter(
+		// 	(provider) => provider.serviceId === currentService && (
+		// 		filter === 'location'
+		// 			? provider.location.toLowerCase().includes(SearchQuery.toLowerCase())
+		// 			: provider.title.toLowerCase().includes(SearchQuery.toLowerCase())
+		// 	)
+		// ));
+
 		if (providers?.length > 0) {
-			setFilteredServices(providers);
-			console.log('Providers', providers);
+			setFilteredServices(providers.filter((provider) => {
+				return provider?.expand?.service?.find((service) => service?.title === currentService)
+			}));
 		}
+
 	}, [currentService, SearchQuery, providers]);
-
-	useEffect(()=>{
-		const initialTimeOut = setTimeout(() => {
-			checkShouldShoPopup();
-		}, 25000);
-
-		const interval = setInterval(() => {
-			checkShouldShoPopup();
-		}, 10000);
-
-		const handleEsc = (e) => {
-			if (e.key === "Escape") {
-				setIsPopup(false);
-				localStorage.setItem('popupEscClosedAt', Date.now().toString());
-			}
-		};
-
-		window.addEventListener('keydown', handleEsc);
-
-		return ()=>{
-			clearTimeout(initialTimeOut);
-			clearInterval(interval);
-			window.removeEventListener('keydown', handleEsc);
-		}
-	},[])
 
 
 	const handlePopUpClose = () => {
-		setIsPopup(false);
-		localStorage.setItem('popupClosedAt', Date.now().toString());
+		if (isPopup) {
+			setIsPopup(!isPopup);
+		}
 	}
 
 	return (

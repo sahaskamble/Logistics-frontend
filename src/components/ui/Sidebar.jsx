@@ -20,7 +20,6 @@ import Link from "next/link";
 import { Popover } from "./Popover";
 import { useAuth } from "@/contexts/AuthContext";
 import NotificationSheet from "./NotificationSheet";
-import { ROLES, getSidebarAccess } from "@/constants/roles";
 
 export default function Sidebar({
   children,
@@ -36,26 +35,23 @@ export default function Sidebar({
   const { open: isOpen, setOpen: setIsOpen, title } = useSidebar();
   const currentPath = usePathname();
   const router = useRouter();
-  const { Logout, user } = useAuth();
-
-  // Determine the actual sidebar access based on user role
-  const actualSidebarAccess = user?.role === ROLES.ROOT ? access : getSidebarAccess(user?.role) || access;
+  const { Logout } = useAuth();
 
   const menuItems = [
     {
       icon: <MessageSquare className="text-[var(--foreground)]" />,
       text: "Messages",
-	  url: '/customer/messages',
+      url: "/customer/messages",
     },
     {
       icon: <CircleUserRound className="text-[var(--foreground)]" />,
       text: "Profile",
-	  url: '/customer/profile',
+      url: "/customer/profile",
     },
     {
       icon: <LayoutDashboard className="text-[var(--foreground)]" />,
       text: "Dashboard",
-	  url: '/customer/dashboard',
+      url: "/customer/dashboard",
     },
   ];
 
@@ -69,7 +65,7 @@ export default function Sidebar({
     {
       title: "Log out",
       icon: <LogOutIcon className="w-5 h-5 text-[var(--foreground)]" />,
-	  logout: Logout,
+      logout: Logout,
     },
   ];
 
@@ -137,6 +133,11 @@ export default function Sidebar({
     if (isMobile) return "w-3/4 max-w-xs"; // 75% width on mobile, max 320px
     if (isTablet) return "w-72"; // Fixed width on tablet
     return sidebarClassWidth; // Default width on desktop
+  };
+
+  const handleLogout = () => {
+    Logout();
+    window.location.reload();
   };
 
   return (
@@ -276,13 +277,7 @@ flex flex-col
             variant="invert"
             className="w-full rounded-xl"
             icon={<LogOutIcon className="w-4 h-4 ml-2" />}
-            onClick={() =>
-              access === "Customer"
-                ? router.push("/customer/home")
-                : access === "Client"
-                ? router.push("/client/login")
-                : router.push("/gol/login")
-            }
+            onClick={() => handleLogout()}
             iconPosition="right"
           />
         </div>
@@ -304,7 +299,7 @@ flex flex-col
             <h1 className="ml-4 text-lg md:text-xl font-semibold">{title}</h1>
           </div>
           <div className="flex items-center gap-3">
-            <NotificationSheet userType={actualSidebarAccess} />
+            <NotificationSheet userType={access} />
             <Popover
               trigger={
                 <User className="w-7 h-7 md:w-8 md:h-8 bg-[var(--primary)] text-[var(--background)] p-1.5 rounded-full" />
@@ -316,7 +311,7 @@ flex flex-col
                   {menuItems.map((item, index) => (
                     <Link
                       key={index}
-					  href={item.url}
+                      href={item.url}
                       className="flex items-center py-1.5 px-4 hover:bg-[var(--background)] cursor-pointer"
                     >
                       <span className="w-6 text-center mr-4">{item.icon}</span>
@@ -335,7 +330,7 @@ flex flex-col
                   {hostItems.map((item, index) => (
                     <div
                       key={index}
-					  onClick={item.logout && item.logout}
+                      onClick={() => item?.logout && handleLogout()}
                       className="flex items-start py-3 px-4 hover:bg-[var(--background)] cursor-pointer"
                     >
                       <div className="flex-1">

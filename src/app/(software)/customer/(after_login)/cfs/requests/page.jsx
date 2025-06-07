@@ -2,17 +2,26 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect, useState } from "react";
-import { requestsList } from "@/constants/requests";
 import { Select, SelectItem } from "@/components/ui/Select";
 import { cfsServices } from "@/constants/services";
-import { CircleX, Clock, Search, Verified } from "lucide-react";
+import { CircleX, Clock, Verified } from "lucide-react";
+import { Download, MessageCircleQuestion, Trash } from "lucide-react";
 import { DataTable } from "@/components/ui/Table";
-import { RequestColumns } from "./components/columns";
 import NewRequests from "../../components/NewRequests";
+import { useCollection } from "@/hooks/useCollection";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileDataTable from "@/components/ui/MobileDataTable";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function RequestsPage() {
+	const { data, deleteItem } = useCollection('cfs_service_requests', {
+		expand: 'user,order,serviceType'
+	});
+
 	const { setTitle } = useSidebar();
-	const [requests, setRequests] = useState(requestsList);
+	const { user } = useAuth();
+	const [requests, setRequests] = useState([]);
+	const [requestsList, setRequestsList] = useState([])
 	const [Stats, setStats] = useState({
 		pending: 0,
 		approved: 0,
@@ -27,22 +36,118 @@ export default function RequestsPage() {
 
 	// For Stats
 	useEffect(() => {
-		let pending = 0, approved = 0, rejected = 0;
-		requests.forEach((request) => {
-			switch (request.status) {
-				case 'Accepted':
-					approved += 1;
-					break;
-				case 'Rejected':
-					rejected += 1;
-					break;
-				case 'Pending':
-					pending += 1;
-					break;
-			}
-		});
-		setStats({ pending, approved, rejected });
-	}, [requests]);
+		if (data?.length > 0 && user?.id) {
+			const filtered_data = data.filter((item) => item?.user === user?.id);
+			setRequestsList(filtered_data);
+			setRequests(filtered_data);
+			let pending = 0, approved = 0, rejected = 0;
+			filtered_data.forEach((request) => {
+				switch (request.status) {
+					case 'Accepted':
+						approved += 1;
+						break;
+					case 'Rejected':
+						rejected += 1;
+						break;
+					case 'Pending':
+						pending += 1;
+						break;
+				}
+			});
+			setStats({ pending, approved, rejected });
+		}
+	}, [user, data]);
+
+	const RequestColumns = [
+		{
+			id: 'id',
+			accessorKey: 'id',
+			header: 'Request ID',
+			filterable: true,
+			cell: ({ row }) => <div>{row.original.id}</div>,
+		},
+		{
+			id: 'order-no',
+			accessorKey: 'order.id',
+			header: 'Order ID',
+			filterable: true,
+			cell: ({ row }) => <div>{row.original.order}</div>,
+		},
+		{
+			id: 'remarks',
+			accessorKey: 'remarks',
+			header: 'Your Remarks',
+			filterable: true,
+			cell: ({ row }) => <div>{row.original.customerRemarks}</div>,
+		},
+		{
+			id: 'reason',
+			accessorKey: 'reason',
+			header: 'Reason',
+			filterable: true,
+			cell: ({ row }) => <div>{row.original.clientReason}</div>,
+		},
+		{
+			id: 'serviceType',
+			accessorKey: 'serviceType',
+			header: 'Service Type',
+			filterable: true,
+			cell: ({ row }) => <div>{row.original?.expand?.serviceType?.title}</div>,
+		},
+		{
+			id: 'status',
+			accessorKey: 'status',
+			header: 'Status',
+			filterable: true,
+			cell: ({ row }) => <div className={`${getStatusColor(row.original.status)} rounded-xl px-4 py-2 text-center`}>{row.original.status}</div>,
+		},
+		{
+			id: 'actions',
+			accessorKey: 'actions',
+			header: 'Actions',
+			filterable: false,
+			cell: ({ row }) => (
+				<div className='flex gap-3 items-center justify-center w-full'>
+					{
+						row.original.status === 'Rejected' && (
+							<MessageCircleQuestion
+								size={18}
+								className="cursor-pointer text-[var(--primary)]"
+							/>
+						)
+					}
+					<Trash
+						size={18}
+						className="cursor-pointer text-primary"
+						onClick={async () => {
+							console.log('Delete details for', row.original.id);
+							const confirmation = confirm('Are you sure you want to delete this container?');
+							if (confirmation) {
+								await deleteItem(row.original.id);
+							}
+						}}
+					/>
+					<Download
+						size={18}
+						className="cursor-pointer text-[var(--primary)]"
+					/>
+				</div>
+			),
+		}
+	]
+
+	const getStatusColor = (status) => {
+		switch (status) {
+			case 'Accepted':
+				return 'bg-green-100 text-green-800 border-2 border-green-600';
+			case 'Pending':
+				return 'bg-yellow-100 text-yellow-800 border-2 border-yellow-500';
+			case 'Rejected':
+				return 'bg-red-100 text-red-800 border-2 border-red-600';
+			default:
+				return 'bg-gray-100 text-gray-800 border-2 border-gray-500';
+		}
+	};
 
 	return (
 		<section className="grid gap-8 w-full">
@@ -86,27 +191,51 @@ export default function RequestsPage() {
 					<h1 className="text-2xl font-semibold">Request Lists</h1>
 					<NewRequests />
 				</div>
-				<DataTable data={requests} columns={RequestColumns} additionalFilters={
-					<Select
-						placeholder="Service Type"
-						value={serviceType}
-						onValueChange={(value) => {
-							if (value === '' || value === 'all') {
-								setRequests(requestsList);
-							} else {
-								setRequests(requestsList.filter((request) => request.serviceType === value));
-								setServiceType(value)
-							}
-						}}
-					>
-						<SelectItem value={'all'}>All Services</SelectItem>
-						{cfsServices.map((service, index) => (
-							<SelectItem key={index} value={service.id}>{service.title}</SelectItem>
-						))}
-					</Select>
-				} />
+				{
+					useIsMobile() ? (
+						<MobileDataTable data={requests} columns={RequestColumns} additionalFilters={
+							<Select
+								placeholder="Service Type"
+								value={serviceType}
+								onValueChange={(value) => {
+									if (value === '' || value === 'all') {
+										setRequests(requestsList);
+									} else {
+										setRequests(requestsList.filter((request) => request.serviceType === value));
+										setServiceType(value)
+									}
+								}}
+							>
+								<SelectItem value={'all'}>All Services</SelectItem>
+								{cfsServices.map((service, index) => (
+									<SelectItem key={index} value={service.id}>{service.title}</SelectItem>
+								))}
+							</Select>
+						} />
+					) : (
+						<DataTable data={requests} columns={RequestColumns} additionalFilters={
+							<Select
+								placeholder="Service Type"
+								value={serviceType}
+								onValueChange={(value) => {
+									if (value === '' || value === 'all') {
+										setRequests(requestsList);
+									} else {
+										setRequests(requestsList.filter((request) => request.serviceType === value));
+										setServiceType(value)
+									}
+								}}
+							>
+								<SelectItem value={'all'}>All Services</SelectItem>
+								{cfsServices.map((service, index) => (
+									<SelectItem key={index} value={service.id}>{service.title}</SelectItem>
+								))}
+							</Select>
+						} />
+
+					)
+				}
 			</div>
 		</section>
 	)
 }
-

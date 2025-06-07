@@ -2,8 +2,6 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
-import MobileTable from "@/app/(software)/customer/components/MobileTable";
 import Table from "@/app/(software)/customer/components/Table";
 
 export default function WeighmentSlipPage() {
@@ -14,13 +12,7 @@ export default function WeighmentSlipPage() {
 
 	return (
 		<section className="grid gap-8">
-			{
-				useIsMobile() ? (
-					<MobileTable serviceName="Weighment Slip" />
-				) : (
-					<Table serviceName="Weighment Slip" />
-				)
-			}
+			<Table serviceName="Weighment Slip" />
 		</section>
 	)
 }

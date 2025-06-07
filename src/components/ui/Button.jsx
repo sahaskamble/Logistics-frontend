@@ -4,7 +4,7 @@ export default function Button({ variant, title, icon, iconPosition = 'left', cl
 	return (
 		<button
 			className={
-				`flex ${icon_Position} items-center justify-center gap-2 px-3 py-2 transition-colors duration-300 
+				`flex ${icon_Position} items-center justify-center gap-2 px-3 py-2 transition-colors duration-300 rounded-lg 
 					${className} ${variantClass} ${disabled ? 'text-gray-500 border-gray-500 bg-opacity/50 cursor-not-allowed' : 'cursor-pointer'}
 				`
 			}

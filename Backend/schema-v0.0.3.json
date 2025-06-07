@@ -755,6 +755,19 @@
         "type": "relation"
       },
       {
+        "cascadeDelete": false,
+        "collectionId": "_pb_users_auth_",
+        "hidden": false,
+        "id": "relation2168032777",
+        "maxSelect": 1,
+        "minSelect": 0,
+        "name": "customer",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "relation"
+      },
+      {
         "hidden": false,
         "id": "date3149528700",
         "max": "",
@@ -1929,6 +1942,19 @@
         "required": false,
         "system": false,
         "type": "number"
+      },
+      {
+        "cascadeDelete": false,
+        "collectionId": "_pb_users_auth_",
+        "hidden": false,
+        "id": "relation3182418120",
+        "maxSelect": 1,
+        "minSelect": 0,
+        "name": "author",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "relation"
       },
       {
         "hidden": false,

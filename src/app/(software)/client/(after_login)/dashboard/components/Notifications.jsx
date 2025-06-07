@@ -26,3 +26,4 @@ const notificationsList = [
 		title: 'Tariff document uploaded by Red Ocean for review'
 	},
 ];
+

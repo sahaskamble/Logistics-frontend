@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataTable } from '@/components/ui/Table';
-import { Eye, Download, Pencil, TrashIcon, Trash } from 'lucide-react';
+import { Eye, Download, Trash } from 'lucide-react';
 import CreateForm from './Form';
 import { useCollection } from '@/hooks/useCollection';
 import EditForm from './EditForm';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Table = () => {
   const { data, deleteItem } = useCollection('cfs_job_order', {
-    expand: 'order,serviceType'
+    expand: 'order,order.cfs,serviceType'
   });
-  console.log(data)
+  const { user } = useAuth();
+  const [filteredData, setFilteredData] = useState([]);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -135,17 +139,40 @@ const Table = () => {
     }
   ];
 
-  return (
-    <div className="border-2 bg-accent p-4 rounded-xl mt-8">
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-lg font-semibold">Job Orders</h1>
-        <CreateForm />
-      </div>
+  useEffect(() => {
+    if (data?.length > 0 && user?.id) {
+      const filtered_data = data.filter((item) => item?.expand?.order?.expand?.cfs?.author === user?.id);
+      setFilteredData(filtered_data);
+    }
+  }, [data]);
 
-      <DataTable
-        columns={columns}
-        data={data}
-      />
+  return (
+    <div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
+      {
+        useIsMobile() ? (
+          <>
+            <h1 className="text-xl font-semibold p-4">Job Orders</h1>
+            <div className="flex justify-end p-4">
+              <CreateForm />
+            </div>
+            <MobileDataTable
+              columns={columns}
+              data={filteredData}
+            />
+          </>
+        ) : (
+          <>
+            <div className="flex items-center justify-between gap-4">
+              <h1 className="text-lg font-semibold">Job Orders</h1>
+              <CreateForm />
+            </div>
+            <DataTable
+              columns={columns}
+              data={filteredData}
+            />
+          </>
+        )
+      }
     </div>
   );
 };

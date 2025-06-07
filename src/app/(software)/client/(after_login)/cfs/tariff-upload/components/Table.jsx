@@ -3,12 +3,16 @@ import { Eye, Download, CircleCheckBig, CircleX } from 'lucide-react';
 import { useCollection } from '@/hooks/useCollection';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useEffect, useState } from 'react';
 
 export default function RequestTable() {
   const { data, updateItem, mutation } = useCollection('cfs_tariffs_request', {
-    expand: 'order,jobOrder,container,type'
+    expand: 'order,order.cfs,jobOrder,container,type'
   });
   const { user } = useAuth();
+  const [filteredData, setFilteredData] = useState([]);
 
   const handleStatusUpdate = async (id, status = 'Pending') => {
     try {
@@ -148,15 +152,31 @@ export default function RequestTable() {
     }
   ];
 
+  useEffect(() => {
+    if (data?.length > 0 && user?.id) {
+      const filtered_data = data.filter((item) => item?.expand?.order?.expand?.cfs?.author === user?.id);
+      setFilteredData(filtered_data);
+    }
+  }, [data]);
 
   return (
-    <div className="border-2 bg-accent p-4 rounded-xl mt-8">
-      <h1 className="text-lg font-semibold">Requests List</h1>
-
-      <DataTable
-        columns={columns}
-        data={data}
-      />
+    <div>
+      <div className="border-2 md:bg-accent md:p-4 rounded-xl md:mt-8">
+        <h1 className="text-xl font-semibold md:p-0 p-4">Requests List</h1>
+        {
+          useIsMobile() ? (
+            <MobileDataTable
+              columns={columns}
+              data={filteredData}
+            />
+          ) : (
+            <DataTable
+              columns={columns}
+              data={filteredData}
+            />
+          )
+        }
+      </div>
     </div>
   );
 };

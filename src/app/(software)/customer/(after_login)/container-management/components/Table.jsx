@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react'
 import Form from './Form';
 import EditForm from './EditForm';
 import { useAuth } from '@/contexts/AuthContext';
+import MobileDataTable from '@/components/ui/MobileDataTable';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function Table() {
 	const { data, deleteItem } = useCollection('containers', {
@@ -98,21 +100,41 @@ export default function Table() {
 	];
 
 	useEffect(() => {
-		if (data?.length > 0 || user?.id) {
-			// const filtered_data = data.filter((item) => item.ownedBy === user?.id);
-			setFilteredData(data);
+		if (data?.length > 0 && user?.id) {
+			const filtered_data = data.filter((item) => item?.ownedBy === user?.id);
+			setFilteredData(filtered_data);
 		}
 	}, [data]);
 
 
 	return (
-		<div className='w-full bg-accent border shadow-md shadow-foreground/40 rounded-lg p-6'>
-			<div className="flex gap-4 items-center justify-between">
-				<h1 className="text-2xl font-semibold">Containers</h1>
-				<Form />
-			</div>
+		<div className="border-2 md:bg-accent md:p-4 rounded-xl mt-8">
+			{
+				useIsMobile() ? (
+					<>
+						<h1 className="text-xl font-semibold p-4">Containers</h1>
+						<div className="flex justify-end p-4">
+							<Form />
+						</div>
+						<MobileDataTable
+							columns={columns}
+							data={filteredData}
+						/>
+					</>
+				) : (
+					<>
+						<div className="flex items-center justify-between gap-4">
+							<h1 className="text-lg font-semibold">Containers</h1>
+							<Form />
+						</div>
 
-			<DataTable columns={columns} data={filteredData} />
+						<DataTable
+							columns={columns}
+							data={filteredData}
+						/>
+					</>
+				)
+			}
 		</div>
 	)
 }
