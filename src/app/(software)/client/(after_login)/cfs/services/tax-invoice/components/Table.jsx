@@ -2,6 +2,7 @@ import { Download, Eye, Pencil, TrashIcon } from 'lucide-react';
 import { DataTable } from '@/components/ui/Table';
 import { taxInvoices } from '@/constants/cfs/tax-invoice';
 import Form from './Form';
+import Link from 'next/link';
 
 export default function Table() {
   const columns = [
@@ -89,11 +90,15 @@ export default function Table() {
       filterable: false,
       cell: ({ row }) => (
         <div className='flex gap-2 items-center'>
-          <Eye
-            size={18}
-            className="cursor-pointer text-primary"
-            onClick={() => console.log('View details for', row.original.id)}
-          />
+          <Link
+            href={`/client/cfs/services/tax-invoice/view/${row.original.id}`}
+          >
+            <Eye
+              size={18}
+              className="cursor-pointer text-primary"
+              onClick={() => console.log('View details for', row.original.id)}
+            />
+          </Link>
           <Pencil
             size={18}
             className="cursor-pointer text-primary"

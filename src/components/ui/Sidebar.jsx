@@ -277,7 +277,7 @@ flex flex-col
             variant="invert"
             className="w-full rounded-xl"
             icon={<LogOutIcon className="w-4 h-4 ml-2" />}
-            onClick={() => handleLogout()}
+            onClick={Logout}
             iconPosition="right"
           />
         </div>

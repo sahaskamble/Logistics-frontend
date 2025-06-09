@@ -4,10 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { useCollection } from '@/hooks/useCollection';
 import { useParams } from 'next/navigation';
 import pbclient from '@/lib/db';
-import { toast } from 'sonner';
+import { useSidebar } from '@/contexts/SidebarProvider';
+import DetailCard from './components/DetailsCard';
+import AppBreadcrumb from '@/components/ui/app-breadcrumb';
 
 export default function OrderViewDetailsPage() {
   const { orderId } = useParams();
+  const { setTitle } = useSidebar();
   const { data: orders, isLoading } = useCollection('cfs_orders', {
     expand: 'containers,cfs',
     filter: `id="${orderId}" && golVerified=true`,
@@ -17,6 +20,10 @@ export default function OrderViewDetailsPage() {
   console.log("Orders Array", orders)
 
   useEffect(() => {
+    // Setting the Page Title in top navbar
+    setTitle(`View Order Details`)
+
+    // confirming the Orders Array and setting up images Array
     if (orders && Array.isArray(orders) && orders.length > 0) {
       const order = orders?.[0];
       const imgUrls = order.files.map(imgs =>
@@ -24,14 +31,14 @@ export default function OrderViewDetailsPage() {
       );
       setImages(imgUrls);
     } else {
-      toast.error('Error getting Images from server');
+      console.log('Error getting Images from server');
     }
   }, [orders]);
 
-  console.log("Images url Array", images)
-
+  // Once again verifing The Orders Array is comming with single index
   const order = orders?.[0];
 
+  // Loading State
   if (isLoading)
     return <div className="p-8 text-[color:var(--secondary)] text-center">Loading order details...</div>;
   if (!order)
@@ -39,6 +46,9 @@ export default function OrderViewDetailsPage() {
 
   return (
     <div className="max-w-container mx-auto px-6 py-10 space-y-8 bg-[color:var(--accent)] rounded-lg shadow-lg">
+      <div>
+        <AppBreadcrumb dashboard={'/client/dashboard'} />
+      </div>
       <header className="border-b border-[color:var(--secondary)] pb-4 mb-6">
         <h1 className="text-3xl font-bold text-[color:var(--foreground)]">Order Details</h1>
         <p className="text-sm text-[color:var(--secondary)]">
@@ -124,20 +134,3 @@ export default function OrderViewDetailsPage() {
   );
 }
 
-// Reusable component
-function DetailCard({ label, value, full = false, color = 'foreground', status = false }) {
-  if (!value) return null;
-
-  const colorMap = {
-    foreground: 'text-[color:var(--foreground)]',
-    primary: 'text-[color:var(--primary)]',
-    secondary: 'text-[color:var(--secondary)]',
-  };
-
-  return (
-    <div className={`space-y-1 ${full ? 'col-span-1 md:col-span-2' : ''}`}>
-      <p className="text-sm text-[color:var(--secondary)]">{label}</p>
-      <p className={`text-base font-medium ${colorMap[color]}`}><span className={`${status ? 'bg-[var(--primary)] text-accent px-2 py-1 rounded-lg' : ''}`}>{value}</span></p>
-    </div>
-  );
-}

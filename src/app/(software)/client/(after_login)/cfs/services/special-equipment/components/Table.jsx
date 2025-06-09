@@ -3,6 +3,7 @@ import { Download, Eye, Pencil, TrashIcon } from 'lucide-react';
 import { DataTable } from '@/components/ui/Table';
 import { specialEquipments } from '@/constants/cfs/special-equipments';
 import Form from './Form';
+import Link from 'next/link';
 
 export default function Table() {
   const getStatusClass = (status) => {
@@ -104,11 +105,15 @@ export default function Table() {
       filterable: false,
       cell: ({ row }) => (
         <div className='flex gap-2 items-center'>
-          <Eye
-            size={18}
-            className="cursor-pointer text-primary"
-            onClick={() => console.log('View details for', row.original.id)}
-          />
+          <Link
+            href={`/client/cfs/services/special-equipments/view/${row.original.id}`}
+          >
+            <Eye
+              size={18}
+              className="cursor-pointer text-primary"
+              onClick={() => console.log('View details for', row.original.id)}
+            />
+          </Link>
           <Pencil
             size={18}
             className="cursor-pointer text-primary"

@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useCollection } from '@/hooks/useCollection';
 import pbclient from '@/lib/db';
+import { useSidebar } from '@/contexts/SidebarProvider';
 // import { toast } from 'sonner';
 
 export default function ServiceRequestViewDetailsPage() {
   const { requestId } = useParams();
+  const { setTitle } = useSidebar()
   const { data: requests, isLoading } = useCollection('cfs_service_requests', {
     expand: 'order,order.cfs,serviceType,merchantVerifiedBy,golVerifiedBy,user',
     filter: `id="${requestId}"`,
@@ -17,6 +19,9 @@ export default function ServiceRequestViewDetailsPage() {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
+    // Setting the Page Title in top navbar
+    setTitle(`View Service Request Details`)
+
     if (request?.files?.length > 0) {
       const imageUrls = request.files.map((file) => pbclient.files.getURL(request, file));
       setImages(imageUrls);

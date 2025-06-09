@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "@/app/(software)/client/components/Table";
+import Table from "./components/Table";
 
 export default function ReScanningPage() {
 	const { setTitle } = useSidebar();
@@ -12,7 +12,7 @@ export default function ReScanningPage() {
 
 	return (
 		<section className="grid gap-8">
-			<Table serviceName="Re-Scanning" />
+			<Table />
 		</section>
 	)
 }

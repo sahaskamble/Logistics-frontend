@@ -7,6 +7,7 @@ import EditForm from './EditForm';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileDataTable from '@/components/ui/MobileDataTable';
 import { useAuth } from '@/contexts/AuthContext';
+import Link from 'next/link';
 
 const Table = ({ serviceName = '' }) => {
   const { data, deleteItem } = useCollection('cfs_service_details', {
@@ -118,11 +119,14 @@ const Table = ({ serviceName = '' }) => {
       filterable: false,
       cell: ({ row }) => (
         <div className='flex gap-2 items-center'>
-          <Eye
-            size={18}
-            className="cursor-pointer text-primary"
-            onClick={() => console.log('View details for', row.original.id)}
-          />
+          <Link
+            href={`/client/cfs/services/eir-cop/view/${row.original.id}`}
+          >
+            <Eye
+              size={18}
+              className="cursor-pointer text-primary"
+            />
+          </Link>
           <EditForm info={row.original} />
           <Trash
             size={18}
