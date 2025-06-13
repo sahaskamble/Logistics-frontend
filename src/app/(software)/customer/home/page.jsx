@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import HeaderLayout from "./components/HeaderLayout";
 import MobileHeaderLayout from "./components/MobileHeaderLayout";
-import { ServiceProviders, servicesList } from "@/constants/services";
 import Button from "@/components/ui/Button";
 import { SlidersHorizontalIcon, Star, MapPin, ChevronLeft, ChevronRight, Search, } from 'lucide-react';
 import Image from "next/image";
@@ -30,15 +29,6 @@ export default function ClientHomePage() {
 	const [isPopup, setIsPopup] = useState(true);
 
 	useEffect(() => {
-		// setServiceTitle(servicesList?.find((service) => service?.label === currentService).label);
-		// setFilteredServices(ServiceProviders.filter(
-		// 	(provider) => provider.serviceId === currentService && (
-		// 		filter === 'location'
-		// 			? provider.location.toLowerCase().includes(SearchQuery.toLowerCase())
-		// 			: provider.title.toLowerCase().includes(SearchQuery.toLowerCase())
-		// 	)
-		// ));
-
 		if (providers?.length > 0) {
 			setFilteredServices(providers.filter((provider) => {
 				return provider?.expand?.service?.find((service) => service?.title === currentService)
@@ -108,6 +98,7 @@ export default function ClientHomePage() {
 							description={provider.description}
 							images={provider.files || []}
 							id={provider.id}
+							currentService={currentService}
 						/>
 					))}
 				</div>
@@ -119,7 +110,7 @@ export default function ClientHomePage() {
 	)
 }
 
-const ServiceCard = ({ title, location, rating, tags, description, images, id }) => {
+const ServiceCard = ({ title, location, rating, tags, description, images, id, currentService }) => {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const nextImage = () => {
 		setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -194,8 +185,8 @@ const ServiceCard = ({ title, location, rating, tags, description, images, id })
 					<p className="mt-6">{description}</p>
 				</div>
 				<div className="flex flex-wrap gap-4 mt-4">
-					<RequestPopup provider={id} />
-					<UrgentRequestPopup provider={id} />
+					<RequestPopup provider={id} service={currentService} />
+					<UrgentRequestPopup provider={id} service={currentService} />
 					<Button title={'View Details'} className="rounded-md" />
 				</div>
 			</div>

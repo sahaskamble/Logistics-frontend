@@ -26,7 +26,7 @@ export default function LoginPage() {
 				localStorage.setItem('rememberMe', JSON.stringify(rememberMe));
 				localStorage.setItem('record', JSON.stringify(res));
 				localStorage.setItem('role', ROLES.CUSTOMER);
-				router.push('/customer/dashboard')
+				router.push('/customer/home')
 			} else {
 				alert('Login Unsuccessful');
 			}

@@ -2,9 +2,9 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "@/app/(software)/customer/components/Table";
+import CFSServices from "@/components/services/cfs/services/CFSServices";
 
-export default function PriorityRequestPage() {
+export default function PriorityPage() {
 	const { setTitle } = useSidebar();
 	useEffect(() => {
 		setTitle('Priority Movements')
@@ -12,8 +12,7 @@ export default function PriorityRequestPage() {
 
 	return (
 		<section className="grid gap-8">
-			<Table serviceName="Priority Movements" />
+			<CFSServices serviceName="Priority Movements" />
 		</section>
 	)
-}
-
+};

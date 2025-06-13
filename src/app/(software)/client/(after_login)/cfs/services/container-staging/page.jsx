@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "@/app/(software)/client/components/Table";
+import CFSServices from "@/components/services/cfs/services/CFSServices";
 
 export default function ContainerStagingPage() {
 	const { setTitle } = useSidebar();
@@ -12,8 +12,7 @@ export default function ContainerStagingPage() {
 
 	return (
 		<section className="grid gap-8">
-			<Table serviceName="Container Staging" />
+			<CFSServices serviceName="Container Staging" />
 		</section>
 	)
-}
-
+};

@@ -8,7 +8,6 @@ import JobOrderInput from '@/app/(software)/client/components/JobOrderInput';
 import { Dialog } from '@/components/ui/Dialog';
 import TextArea from '@/components/ui/TextArea';
 import { useCollection } from '@/hooks/useCollection';
-import { Select, SelectItem } from '@/components/ui/Select';
 import ContainerInput from './ContainerInput';
 import { toast } from 'sonner';
 
@@ -41,13 +40,6 @@ export default function Form({ serviceName = '' }) {
     });
   };
 
-  const handleServiceChange = (value) => {
-    setFormData({
-      ...formData,
-      type: value
-    });
-  };
-
   const handleReset = () => {
     setFormData({
       agent: '',
@@ -74,24 +66,30 @@ export default function Form({ serviceName = '' }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = new FormData();
-      data.append('order', orderId);
-      data.append('jobOrder', jobOrderId);
-      data.append('container', containerNumber);
-      data.append('type', formData.type);
-      data.append('agent', formData.agent);
-      data.append('date', formData.date);
-      data.append('receiptNo', formData.receiptNo);
-      data.append('remarks', formData.remarks);
-      data.append('status', formData.status);
-      // Append each file
-      formData.files.forEach((file) => {
-        data.append('files', file); // `files` must match the PocketBase field name
-      });
 
-      console.log('Form submitted:', data);
-      await createItem(data);
-      toast.success('Created a new entry');
+      const type = cfsServices.find((service) => service?.expand?.service?.title === 'CFS' && service?.title === serviceName)
+      if (type?.id) {
+        const data = new FormData();
+        data.append('order', orderId);
+        data.append('jobOrder', jobOrderId);
+        data.append('container', containerNumber);
+        data.append('type', type?.id);
+        data.append('agent', formData.agent);
+        data.append('date', formData.date);
+        data.append('receiptNo', formData.receiptNo);
+        data.append('remarks', formData.remarks);
+        data.append('status', formData.status);
+        // Append each file
+        formData.files.forEach((file) => {
+          data.append('files', file); // `files` must match the PocketBase field name
+        });
+
+        console.log('Form submitted:', data);
+        await createItem(data);
+        toast.success('Created a new entry');
+      } else {
+        toast.info('Please select a service before adding...');
+      }
     } catch (error) {
       console.log(error)
       toast.error(error.message);
@@ -122,24 +120,6 @@ export default function Form({ serviceName = '' }) {
           <OrderInput setOrderId={setOrderId} />
           <JobOrderInput setOrderId={setJobOrderId} />
           <ContainerInput setContainerId={setContainerNumber} />
-
-          <div className="flex flex-col gap-2">
-            <Label title="Service Type" />
-            {
-              cfsServices?.length > 0 && (
-                <Select value={formData.type} onValueChange={handleServiceChange} placeholder='Select a Service'>
-                  {
-                    cfsServices
-                      .filter((service) => service?.expand?.service?.title === 'CFS')
-                      .map((service, index) => (
-                        <SelectItem key={index} value={service?.id}>{service?.title}</SelectItem>
-                      ))
-                  }
-                </Select>
-
-              )
-            }
-          </div>
 
           <div className='flex flex-col gap-2'>
             <Label title={'Agent / Supervisor'} />

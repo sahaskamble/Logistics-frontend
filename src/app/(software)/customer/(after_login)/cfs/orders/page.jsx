@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import OrdersList from "./components/Table";
+import CFSOrderTable from "@/components/services/cfs/orders/CFSOrderTable";
 
 export default function RescanRequestPage() {
 	const { setTitle } = useSidebar();
@@ -12,7 +12,7 @@ export default function RescanRequestPage() {
 
 	return (
 		<section className="grid gap-8">
-			<OrdersList />
+			<CFSOrderTable />
 		</section>
 	)
 }

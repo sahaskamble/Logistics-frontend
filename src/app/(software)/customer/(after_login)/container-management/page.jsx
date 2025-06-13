@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "./components/Table";
+import ContainerManagementTable from "@/components/services/container/ContainerManagementTable";
 
 export default function ContainerManagementPage() {
 	const { setTitle } = useSidebar();
@@ -12,7 +12,7 @@ export default function ContainerManagementPage() {
 
 	return (
 		<section>
-			<Table />
+			<ContainerManagementTable />
 		</section>
 	)
 };

@@ -87,7 +87,7 @@ export default function RequestTable() {
           <CircleCheckBig
             size={18}
             className="cursor-pointer text-primary"
-            onClick={() => handleStatusUpdate(row.original.id)}
+            onClick={() => handleStatusUpdate(row.original.id, 'In Progress')}
           />
           <EditForm info={row.original} />
           <Trash

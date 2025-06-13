@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "./components/Table";
+import CFSOrderMovements from "@/components/services/cfs/order_movements/CFSOrderMovements";
 
 export default function OrdersMovementPage() {
 	const { setTitle } = useSidebar();
@@ -12,7 +12,7 @@ export default function OrdersMovementPage() {
 
 	return (
 		<section>
-			<Table />
+			<CFSOrderMovements />
 		</section>
 	)
 };

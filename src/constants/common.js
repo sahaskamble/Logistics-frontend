@@ -21,6 +21,21 @@ export const paymentModes = [
 	},
 ];
 
+export const vehicleStatus = [
+	{
+		id: 'Open',
+		label: 'Open'
+	},
+	{
+		id: 'Busy',
+		label: 'Busy (In Transit)'
+	},
+	{
+		id: 'Damaged',
+		label: 'Damaged'
+	},
+];
+
 export const containerConditions = [
 	{
 		id: 'Good',

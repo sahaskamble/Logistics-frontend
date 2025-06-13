@@ -1,16 +1,13 @@
 'use client';
-import Image from "next/image";
-import { Ship, Plane, Truck, Search, Menu, X } from 'lucide-react';
-import Packages from "./components/packages/page";
-import WhiteCard from "./components/white-card/page";
-import GreenCard from "./components/green-card/page";
-import FAQ from "./components/faq/page";
-import Footer from "./components/footer/page";
-import { useState } from 'react';
-import HeroPage from "./components/hero_page/page";
+import { Search, } from 'lucide-react';
+import HeroPage from './components/hero_page/Hero';
+import WhiteCard from './components/white-card/WhiteCard';
+import Packages from './components/packages/Packages';
+import GreenCard from './components/green-card/GreenCard';
+import FAQ from './components/faq/FAQ';
+import Footer from './components/footer/Footer';
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const info = [
     { no: "5.6K+", label: "Global Partners" },

@@ -9,7 +9,8 @@ import { useEffect, useState } from 'react';
 
 export default function RequestTable() {
   const { data, updateItem, mutation } = useCollection('cfs_tariffs_request', {
-    expand: 'order,order.cfs,jobOrder,container,type'
+    expand: 'order,order.cfs,jobOrder,container,type',
+    filter: 'golVerified=true'
   });
   const { user } = useAuth();
   const [filteredData, setFilteredData] = useState([]);

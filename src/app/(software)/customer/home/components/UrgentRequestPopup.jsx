@@ -7,14 +7,19 @@ import { useCollection } from '@/hooks/useCollection';
 import React, { useState } from 'react'
 import { toast } from 'sonner';
 
-export default function UrgentRequestPopup({ provider }) {
-	const { createItem } = useCollection('cfs_pricing_request');
+export default function UrgentRequestPopup({ provider, service }) {
+	const { createItem: cfsCreate } = useCollection('cfs_pricing_request');
+	const { createItem: warehouseCreate } = useCollection('warehouse_pricing_request');
+	const { createItem: transportCreate } = useCollection('transport_pricing_request');
 	const [isOpen, setIsOpen] = useState(false);
 	const [formData, setFormData] = useState({
 		preferableRate: '',
 		noOfContainers: '',
 		avgContainerSize: '',
 		containersPerMonth: '',
+		startDate: new Date().toISOString().split('T')[0],
+		startLocation: '',
+		endLocation: '',
 		type: 'Urgent',
 		status: 'Pending'
 	});
@@ -26,7 +31,10 @@ export default function UrgentRequestPopup({ provider }) {
 			noOfContainers: '',
 			avgContainerSize: '',
 			containersPerMonth: '',
-			type: 'Normal',
+			startDate: new Date().toISOString().split('T')[0],
+			startLocation: '',
+			endLocation: '',
+			type: 'Urgent',
 			status: 'Pending'
 		});
 	};
@@ -56,22 +64,72 @@ export default function UrgentRequestPopup({ provider }) {
 		}
 	};
 
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		try {
+			setFormData((prev) => ({
+				...prev,
+				[name]: value,
+			}));
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		console.log(user);
 		console.log('Form submitted:', formData);
 		try {
-			await createItem({
-				preferableRate: formData.preferableRate,
-				noOfContainers: formData.noOfContainers,
-				avgContainerSize: formData.avgContainerSize,
-				containersPerMonth: formData.containersPerMonth,
-				type: formData.type,
-				user: user.id,
-				serviceProvider: provider,
-				status: formData.status,
-			});
-			toast.success("Request sent successfully we'll contact you soon....");
+			switch (service) {
+				case 'CFS':
+					await cfsCreate({
+						preferableRate: formData.preferableRate,
+						noOfContainers: formData.noOfContainers,
+						avgContainerSize: formData.avgContainerSize,
+						containersPerMonth: formData.containersPerMonth,
+						type: formData.type,
+						user: user.id,
+						serviceProvider: provider,
+						status: formData.status,
+					});
+					toast.success("Request sent successfully we'll contact you soon....");
+					break;
+
+				case 'Warehouse':
+					await warehouseCreate({
+						preferableRate: formData.preferableRate,
+						noOfContainers: formData.noOfContainers,
+						avgContainerSize: formData.avgContainerSize,
+						containersPerMonth: formData.containersPerMonth,
+						type: formData.type,
+						user: user.id,
+						serviceProvider: provider,
+						status: formData.status,
+					});
+					toast.success("Request sent successfully we'll contact you soon....");
+					break;
+
+				case 'Transport':
+					await transportCreate({
+						preferableRate: formData.preferableRate,
+						noOfContainers: formData.noOfContainers,
+						avgContainerSize: formData.avgContainerSize,
+						containersPerMonth: formData.containersPerMonth,
+						startDate: formData.startDate,
+						startLocation: formData.startLocation,
+						endLocation: formData.endLocation,
+						type: formData.type,
+						user: user.id,
+						serviceProvider: provider,
+						status: formData.status,
+					});
+					toast.success("Request sent successfully we'll contact you soon....");
+					break;
+
+				default:
+					break;
+			}
 		} catch (error) {
 			console.log(error)
 			toast.error(error.message);
@@ -89,6 +147,48 @@ export default function UrgentRequestPopup({ provider }) {
 			trigger={<Button title={'Urgent Price'} className="rounded-md md:text-base text-xs" variant={'secondary'} />}
 		>
 			<div className='md:w-[40dvw] grid gap-4'>
+				{
+					service === 'Transport' && (
+						<>
+							<div className='flex flex-col gap-2'>
+								<Label title="Start Date for commute" />
+								<Input
+									type="date"
+									name="startDate"
+									value={formData.startDate}
+									onChange={handleChange}
+									placeholder="Select date"
+									className='bg-accent'
+								/>
+							</div>
+
+							<div className='flex flex-col gap-2'>
+								<Label title={'Pick-Up Location'} />
+								<Input
+									type="text"
+									name="startLocation"
+									value={formData.startLocation}
+									onChange={handleChange}
+									placeholder="Enter Pick-Up Location"
+									className='bg-accent'
+								/>
+							</div>
+
+							<div className='flex flex-col gap-2'>
+								<Label title={'Drop Location'} />
+								<Input
+									type="text"
+									name="endLocation"
+									value={formData.endLocation}
+									onChange={handleChange}
+									placeholder="Enter Drop Location"
+									className='bg-accent'
+								/>
+							</div>
+						</>
+					)
+				}
+
 				<div className='flex flex-col gap-2'>
 					<Label title={'Preferable Rate'} />
 					<Input

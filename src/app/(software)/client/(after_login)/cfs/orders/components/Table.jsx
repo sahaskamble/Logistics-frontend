@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileDataTable from '@/components/ui/MobileDataTable';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function OrdersList() {
   const { data, updateItem, mutation } = useCollection('cfs_orders', {

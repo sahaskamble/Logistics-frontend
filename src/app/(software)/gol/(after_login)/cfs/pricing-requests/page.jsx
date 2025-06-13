@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import RequestTable from "./components/Table";
+import CFSPricingsRequests from "@/components/services/cfs/pricings/CFSPricingsRequests";
 
 export default function RequestsPage() {
 	const { setTitle } = useSidebar();
@@ -12,8 +12,8 @@ export default function RequestsPage() {
 	}, []);
 
 	return (
-		<section className="grid gap-8 min-h-dvh">
-			<RequestTable />
+		<section className="grid gap-8">
+			<CFSPricingsRequests />
 		</section>
 	)
 }

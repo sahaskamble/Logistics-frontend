@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function NewRequests() {
-	const { data: cfsServices } = useCollection('sub_services', {
+	const { data: warehouseServices } = useCollection('sub_services', {
 		expand: 'service'
 	});
 	const { createItem, mutation } = useCollection('cfs_service_requests');
@@ -101,11 +101,14 @@ export default function NewRequests() {
 				<div className="flex flex-col gap-2">
 					<Label title="Service Type" />
 					{
-						cfsServices?.length > 0 && (
+						warehouseServices?.length > 0 && (
 							<Select value={formData.serviceType} onValueChange={handleServiceChange} placeholder='Select a Service'>
 								{
-									cfsServices
-										.filter((service) => service?.expand?.service?.title === 'CFS')
+									warehouseServices
+										.filter((service) =>
+											service?.expand?.service?.title === 'CFS' && (
+												service?.title !== 'Tariff Uploads' && service?.title !== 'Job Order Update')
+										)
 										.map((service, index) => (
 											<SelectItem key={index} value={service?.id}>{service?.title}</SelectItem>
 										))

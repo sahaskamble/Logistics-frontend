@@ -1,2 +1,2 @@
-export const CompanyName = 'Green Ocean Logistics';
-export const CompanyShort = 'GOL';
+export const CompanyName = 'Logistics In Hand';
+export const CompanyShort = 'LH';

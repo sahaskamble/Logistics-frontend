@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import RequestList from "./components/Table";
+import CFSOrderTable from "@/components/services/cfs/orders/CFSOrderTable";
 
 export default function Order() {
 	const { setTitle } = useSidebar();
@@ -12,7 +12,7 @@ export default function Order() {
 
 	return (
 		<section className="grid gap-8">
-			<RequestList />
+			<CFSOrderTable />
 		</section>
 	)
 }

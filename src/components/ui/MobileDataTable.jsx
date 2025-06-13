@@ -146,7 +146,7 @@ export default function MobileDataTable({
 
 								{/* Main 4 Cells */}
 								{mainCells.map((cell, index) => (
-									<div key={index} className="text-sm flex items-center justify-between border-b border-foreground/20 pb-2">
+									<div key={index} className="text-sm flex items-center justify-between gap-4 border-b border-foreground/20 pb-2">
 										<div className="font-medium text-muted-foreground">
 											{cell?.column?.columnDef?.header?.toString()}
 										</div>
@@ -158,7 +158,7 @@ export default function MobileDataTable({
 								{isExpanded && (
 									<div className="pt-2 space-y-2">
 										{extraCells.map((cell, index) => (
-											<div key={index} className="text-sm flex items-center justify-between border-b border-foreground/20 pb-2">
+											<div key={index} className="text-sm flex items-center justify-between gap-4 border-b border-foreground/20 pb-2">
 												<div className="font-medium text-muted-foreground">
 													{cell?.column?.columnDef?.header?.toString()}
 												</div>

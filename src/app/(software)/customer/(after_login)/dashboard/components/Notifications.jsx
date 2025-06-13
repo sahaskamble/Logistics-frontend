@@ -2,7 +2,7 @@ import { Bell } from "lucide-react";
 
 export default function Notifications() {
 	return (
-		<div className="border p-6 rounded-xl bg-[var(--accent)] shadow-md shadow-foreground/40">
+		<div className="border-2 p-6 rounded-xl">
 			<h1 className="text-xl font-semibold pb-2">Notifications</h1>
 			{notificationsList.map((notification, index) => (
 				<h1 key={index} className="flex items-center gap-4 py-2">
@@ -17,9 +17,13 @@ export default function Notifications() {
 
 const notificationsList = [
 	{
-		title: 'Tariff updated for May 2025.'
+		title: 'Request #RQ105 - Special Equipment request pending'
 	},
 	{
-		title: 'Your recent order was delivered on 11-May-2025.'
+		title: 'Job Order #JORD2391 has been approved'
+	},
+	{
+		title: 'Tariff document uploaded by Red Ocean for review'
 	},
 ];
+

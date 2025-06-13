@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import Footer from '../components/footer/page';
+import Footer from '../components/footer/Footer';
 
 export default function AboutUs() {
     return (

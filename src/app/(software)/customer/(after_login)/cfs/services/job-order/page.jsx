@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "./components/Table";
+import CFSJobOrders from "@/components/services/cfs/job_orders/CFSJobOrderPage";
 
 export default function JobOrderUpdatePage() {
 	const { setTitle } = useSidebar();
@@ -12,7 +12,7 @@ export default function JobOrderUpdatePage() {
 
 	return (
 		<section className="grid gap-8">
-			<Table />
+			<CFSJobOrders />
 		</section>
 	)
 }

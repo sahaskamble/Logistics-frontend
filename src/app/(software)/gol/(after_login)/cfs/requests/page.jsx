@@ -2,19 +2,18 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import RequestTable from "./components/Table";
+import CFSServiceRequests from "@/components/services/cfs/service_requests/CFSServiceRequests";
 
 export default function RequestsPage() {
 	const { setTitle } = useSidebar();
 
 	useEffect(() => {
-		setTitle('Service Requests')
+		setTitle('Pricing Requests')
 	}, []);
 
 	return (
-		<section className="grid gap-8 min-h-dvh">
-			<RequestTable />
+		<section className="grid gap-8">
+			<CFSServiceRequests />
 		</section>
 	)
-}
-
+};

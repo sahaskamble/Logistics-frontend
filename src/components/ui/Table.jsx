@@ -42,9 +42,14 @@ export function DataTable({
 	}, [columns]);
 
 	// Initialize selectedColumn with the first filterable column's id
-	const [selectedColumn, setSelectedColumn] = React.useState(
-		filterableColumns.length > 0 ? filterableColumns[0].id : null
-	);
+	const [selectedColumn, setSelectedColumn] = React.useState(undefined);
+
+	React.useEffect(() => {
+		if (filterableColumns.length > 0 && !selectedColumn) {
+			setSelectedColumn(filterableColumns[0].id);
+		}
+	}, [filterableColumns, selectedColumn]);
+
 
 	const table = useReactTable({
 		data: data || [],
@@ -78,6 +83,7 @@ export function DataTable({
 			</div>
 		);
 	}
+	console.log(selectedColumn);
 
 	return (
 		<div className="w-full">
@@ -102,10 +108,10 @@ export function DataTable({
 							<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
 							<Input
 								placeholder={`Filter by ${filterableColumns.find(col => col.id === selectedColumn)?.label.toLowerCase() || 'column'}...`}
-								value={(table.getColumn(selectedColumn)?.getFilterValue() ?? "")}
-								onChange={(event) =>
-									table.getColumn(selectedColumn)?.setFilterValue(event.target.value)
-								}
+								value={selectedColumn ? (table?.getColumn(selectedColumn)?.getFilterValue() ?? "") : ""}
+								onChange={(event) => {
+									table?.getColumn(selectedColumn)?.setFilterValue(event?.target?.value);
+								}}
 								className="pl-8 w-full bg-[var(--accent)]"
 							/>
 						</div>

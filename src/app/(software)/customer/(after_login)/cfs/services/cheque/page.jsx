@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "@/app/(software)/customer/components/Table";
+import CFSServices from "@/components/services/cfs/services/CFSServices";
 
 export default function ChequeAcceptancePage() {
 	const { setTitle } = useSidebar();
@@ -12,8 +12,7 @@ export default function ChequeAcceptancePage() {
 
 	return (
 		<section className="grid gap-8">
-			<Table serviceName="Cheque Acceptance" />
+			<CFSServices serviceName="Cheque Acceptance" />
 		</section>
 	)
-}
-
+};

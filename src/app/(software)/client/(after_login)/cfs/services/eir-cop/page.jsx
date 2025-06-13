@@ -2,9 +2,9 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "@/app/(software)/client/components/Table";
+import CFSServices from "@/components/services/cfs/services/CFSServices";
 
-export default function EIRRequestPage() {
+export default function EIRPage() {
 	const { setTitle } = useSidebar();
 	useEffect(() => {
 		setTitle('EIR / COP');
@@ -12,7 +12,7 @@ export default function EIRRequestPage() {
 
 	return (
 		<section className="grid gap-8">
-			<Table serviceName="EIR / COP" />
+			<CFSServices serviceName="EIR / COP" />
 		</section>
 	)
 }

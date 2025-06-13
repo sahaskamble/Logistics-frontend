@@ -41,17 +41,17 @@ export default function Sidebar({
 		{
 			icon: <MessageSquare className="text-[var(--foreground)]" />,
 			text: "Messages",
-			url: '/customer/messages',
+			url: "/customer/messages",
 		},
 		{
 			icon: <CircleUserRound className="text-[var(--foreground)]" />,
 			text: "Profile",
-			url: '/customer/profile',
+			url: "/customer/profile",
 		},
 		{
 			icon: <LayoutDashboard className="text-[var(--foreground)]" />,
 			text: "Dashboard",
-			url: '/customer/dashboard',
+			url: "/customer/dashboard",
 		},
 	];
 
@@ -138,7 +138,7 @@ export default function Sidebar({
 	const handleLogout = () => {
 		Logout();
 		window.location.reload();
-	}
+	};
 
 	return (
 		<div className="fixed inset-0  flex min-h-screen overflow-hidden">
@@ -195,8 +195,8 @@ flex flex-col
 										{hasSubItems ? (
 											<div
 												className={`flex items-center justify-between cursor-pointer p-2 rounded transition-colors duration-200 ${active
-													? "bg-white text-[var(--foreground)] font-medium"
-													: "hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20"
+														? "bg-white text-[var(--foreground)] font-medium"
+														: "hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20"
 													}`}
 												onClick={() => toggleItemExpand(index)}
 											>
@@ -216,8 +216,8 @@ flex flex-col
 											<Link
 												href={item.href}
 												className={`flex items-center justify-between p-2 rounded transition-colors duration-200 ${active
-													? "bg-white text-[var(--foreground)] font-medium"
-													: "hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20"
+														? "bg-white text-[var(--foreground)] font-medium"
+														: "hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20"
 													}`}
 												onClick={() =>
 													(isMobile || isTablet) && setIsOpen(false)
@@ -240,8 +240,8 @@ flex flex-col
 															<Link
 																href={subItem.href}
 																className={`flex items-center gap-3 p-2 rounded transition-colors duration-200 ${subActive
-																	? "bg-white text-[var(--foreground)] font-medium"
-																	: "hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20"
+																		? "bg-white text-[var(--foreground)] font-medium"
+																		: "hover:bg-white hover:text-[var(--foreground)] hover:bg-opacity-20"
 																	}`}
 																onClick={() =>
 																	(isMobile || isTablet) && setIsOpen(false)
@@ -273,7 +273,7 @@ flex flex-col
 						variant="invert"
 						className="w-full rounded-xl"
 						icon={<LogOutIcon className="w-4 h-4 ml-2" />}
-						onClick={() => handleLogout()}
+						onClick={Logout}
 						iconPosition="right"
 					/>
 				</div>

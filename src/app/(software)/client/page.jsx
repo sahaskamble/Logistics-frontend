@@ -7,7 +7,7 @@ export default function RedirectToLogin() {
 	const router = useRouter();
 	useEffect(() => {
 		if (router) {
-			router.push('/gol/login')
+			router.push('/client/login')
 		}
 	}, [router]);
 

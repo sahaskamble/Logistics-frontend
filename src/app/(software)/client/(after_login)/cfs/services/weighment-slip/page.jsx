@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "@/app/(software)/client/components/Table";
+import CFSServices from "@/components/services/cfs/services/CFSServices";
 
 export default function WeighmentSlipPage() {
 	const { setTitle } = useSidebar();
@@ -12,8 +12,7 @@ export default function WeighmentSlipPage() {
 
 	return (
 		<section className="grid gap-8">
-			<Table serviceName="Weighment Slip" />
+			<CFSServices serviceName="Weighment Slip" />
 		</section>
 	)
-}
-
+};

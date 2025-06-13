@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect } from "react";
-import Table from "@/app/(software)/customer/components/Table";
+import CFSServices from "@/components/services/cfs/services/CFSServices";
 
 export default function ReScanningPage() {
 	const { setTitle } = useSidebar();
@@ -12,8 +12,7 @@ export default function ReScanningPage() {
 
 	return (
 		<section className="grid gap-8">
-			<Table serviceName="Re-Scanning" />
+			<CFSServices serviceName="Re-Scanning" />
 		</section>
 	)
-}
-
+};
